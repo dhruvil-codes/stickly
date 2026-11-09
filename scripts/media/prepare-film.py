@@ -20,7 +20,7 @@ if (RAW/'narration-original.mp3').exists():
 else:
     shutil.copyfile(ROOT/'docs/media/stickly-voiceover.mp3',PUBLIC/'voiceover.mp3')
 if (RAW/'original-effects.wav').exists():
-    ffmpeg('-i',RAW/'original-effects.wav','-af','volume=0.28','-c:a','libmp3lame','-b:a','128k','-map_metadata','-1',PUBLIC/'effects.mp3')
+    ffmpeg('-i',RAW/'original-effects.wav','-af','volume=0.9','-c:a','libmp3lame','-b:a','128k','-map_metadata','-1',PUBLIC/'effects.mp3')
 else:
     shutil.copyfile(ROOT/'docs/media/source/effects.mp3',PUBLIC/'effects.mp3')
 # These clips contain only synthetic notes in the real Stickly renderer.
@@ -31,6 +31,11 @@ if (RAW/'peel-demo.json').exists():
     ffmpeg('-ss',lead,'-i',source,'-t','7.2','-vf','fps=30','-an','-c:v','libx264','-preset','fast','-crf','17','-threads','2','-map_metadata','-1',PUBLIC/'peel-demo.mp4')
 else:
     shutil.copyfile(ROOT/'docs/media/source/peel-demo.mp4',PUBLIC/'peel-demo.mp4')
+for name in ['music.mp3','peel-foley.mp3']:
+    shutil.copyfile(ROOT/'docs/media/source'/name,PUBLIC/name)
+shutil.copyfile(ROOT/'docs/media/native-desktop-demo.mp4',PUBLIC/'native-desktop.mp4')
+if (ROOT/'docs/media/stickly-soundtrack.mp3').exists():
+    shutil.copyfile(ROOT/'docs/media/stickly-soundtrack.mp3',PUBLIC/'soundtrack.mp3')
 # Keep the approved clips and synthesized effects available in a fresh clone.
 for name in ['checklist-demo.mp4','peel-demo.mp4','effects.mp3']:
     shutil.copyfile(PUBLIC/name,ROOT/'docs/media/source'/name)
@@ -38,7 +43,9 @@ words=[]
 if (RAW/'narration-alignment.json').exists():
     alignment=json.loads((RAW/'narration-alignment.json').read_text(encoding='utf-8'))['alignment']
     text=''.join(alignment['characters'])
+    tag_spans=[match.span() for match in re.finditer(r'\[[^\]]*\]',text)]
     for match in re.finditer(r'\S+',text):
+        if any(a<=match.start()<b for a,b in tag_spans):continue
         start=round((alignment['character_start_times_seconds'][match.start()]+.25)*1000)
         end=round((alignment['character_end_times_seconds'][match.end()-1]+.25)*1000)
         words.append({'text':match.group()+' ','startMs':start,'endMs':end,'timestampMs':(start+end)//2,'confidence':None})
@@ -49,7 +56,7 @@ assert len(words)>60 and words[-1]['endMs']<30000
 chunks=[]; group=[]
 for word in words:
     group.append(word)
-    if len(group)>=8 or word['text'].rstrip().endswith(('.', '?', '!')):
+    if len(group)>=6 or word['text'].rstrip().endswith(('.', '?', '!')):
         chunks.append(group);group=[]
 if group:chunks.append(group)
 def stamp(ms,sep=','):
@@ -62,6 +69,6 @@ for index,group in enumerate(chunks,1):
     vtt.extend([stamp(start,'.')+' --> '+stamp(end,'.'),copy,''])
 (ROOT/'docs/media/launch-captions.srt').write_text('\n'.join(srt),encoding='utf-8')
 (ROOT/'docs/media/launch-captions.vtt').write_text('\n'.join(vtt),encoding='utf-8')
-print(json.dumps({'approvedImages':9,'narrationVoice':'dmWfLQZJq7wNPv9WmtiM','captionWords':len(words),'audioDuration':duration(PUBLIC/'voiceover.mp3'),'realPeelSeconds':duration(PUBLIC/'peel-demo.mp4')}))
+print(json.dumps({'approvedImages':9,'narrationVoice':'cgSgspJ2msm6clMCkdW9','captionWords':len(words),'audioDuration':duration(PUBLIC/'voiceover.mp3'),'realPeelSeconds':duration(PUBLIC/'peel-demo.mp4')}))
 
 (ROOT/'scripts/media/film/src/brand.ts').write_text('export const brandSvg = '+json.dumps((ROOT/'public/stickly-logo.svg').read_text(encoding='utf-8'))+';\n',encoding='utf-8')

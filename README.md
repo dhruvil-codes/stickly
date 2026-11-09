@@ -6,7 +6,7 @@ A thousand things on your mind? Give the next one a little paper. Stickly is a W
 
 <p align="center">
   <a href="docs/media/stickly-launch.mp4"><img src="docs/media/launch-poster.png" alt="Watch the 30-second Stickly launch film, including the real corner peel" width="100%"></a><br>
-  <a href="docs/media/stickly-launch.mp4">Watch the 30-second launch film</a> | <a href="docs/media/README.md">Screenshots and social assets</a>
+  <a href="docs/media/stickly-launch.mp4">Watch the 30-second launch film</a> | <a href="docs/media/native-desktop-demo.mp4">Real Windows demo</a> | <a href="docs/index.html">Video index</a> | <a href="docs/media/README.md">Media kit</a>
 </p>
 
 Early Windows preview. [Build from source](#build-from-source) to try it; see [known limits](#known-limits) for release and licensing details.

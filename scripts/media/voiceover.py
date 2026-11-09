@@ -8,13 +8,15 @@ import urllib.request
 import urllib.error
 
 ROOT=Path(__file__).resolve().parents[2]
-VOICE='dmWfLQZJq7wNPv9WmtiM'
-TEXT=("A thousand things on your mind? Put the next one right here. "
-      "Meet Stickly. Beautiful handwritten notes for your Windows desktop. "
-      "Capture ideas. Check off tasks. Pick a colour. Pin what matters. "
-      "Then grab a corner. Peel it away, follow your cursor, and click to stick it somewhere new. "
-      "Resize it. Restore old notes. Bring it back with Alt N. "
-      "No account. No cloud. Just a little more headspace. Stickly.")
+VOICE='cgSgspJ2msm6clMCkdW9'
+TEXT=("Your brain is not a to-do list. Seriously. "
+      "Meet Stickly. Cute handwritten notes that stay on your Windows desktop. "
+      "Brain dump? Done. Tiny wins? Tick. Make it your colour. "
+      "And this bit? Grab a corner. Peel it up. Take it with you. Click. Stuck. "
+      "Resize it. Pin it. Alt N, and it's back. "
+      "No account. No cloud. Less mental clutter. "
+      "Try Stickly. Good ideas stick.")
+DELIVERY="[playfully] "+TEXT.replace("Meet Stickly.","[upbeat] Meet Stickly.").replace("And this bit?","[curious] And this bit?").replace("Try Stickly.","[confident] Try Stickly.")
 
 def call(path,key,payload=None):
     request=urllib.request.Request('https://api.elevenlabs.io/v1/'+path,data=None if payload is None else json.dumps(payload).encode(),headers={'xi-api-key':key,'Content-Type':'application/json'})
@@ -34,7 +36,7 @@ if __name__=='__main__':
     args=parser.parse_args()
     key=args.api_key_file.read_text(encoding='utf-8-sig').strip() if args.api_key_file else os.environ.get('ELEVENLABS_API_KEY','').strip()
     if not key:raise SystemExit('Provide ELEVENLABS_API_KEY or a private --api-key-file.')
-    result=call('text-to-speech/'+VOICE+'/with-timestamps?output_format=mp3_44100_128',key,{'text':TEXT,'model_id':'eleven_multilingual_v2','voice_settings':{'stability':.5,'similarity_boost':.8,'style':.25,'use_speaker_boost':True,'speed':1.07}})
+    result=call('text-to-speech/'+VOICE+'/with-timestamps?output_format=mp3_44100_128',key,{'text':DELIVERY,'model_id':'eleven_v4','voice_settings':{'stability':.45,'similarity_boost':.8}})
     out=ROOT/'artifacts/media-capture'
     out.mkdir(parents=True,exist_ok=True)
     audio=base64.b64decode(result['audio_base64'])

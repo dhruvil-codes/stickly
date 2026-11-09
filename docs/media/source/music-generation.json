@@ -1,0 +1,7 @@
+{
+  "provider": "ElevenLabs",
+  "model": "music_v2_5",
+  "prompt": "A 30-second original instrumental for a playful Gen Z productivity app launch. Glossy indie-electronic / light UK garage groove at 112 BPM, warm round bass, crisp soft kick, syncopated claps, delicate shakers, bright plucked glass-key melody, airy jazzy seventh chords. Confident, feminine, breezy and cool, slightly cheeky, polished social launch energy. Start with a catchy pluck and percussive hit immediately, no long intro. A tiny rhythmic stop around 3 seconds, full groove at 4. From 12 to 20 seconds thin the arrangement slightly for a tactile paper peel demonstration, then bounce back. Leave space in the centre for spoken female narration. End with a clean resolved two-note sonic logo at 29 seconds and a short decay. No vocals, no spoken words, no corporate ukulele, no epic trailer drums.",
+  "requestedSeconds": 30,
+  "instrumental": true
+}

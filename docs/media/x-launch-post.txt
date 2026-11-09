@@ -1,0 +1,10 @@
+Your brain is not a to-do list.
+
+Meet Stickly: handwritten sticky notes for Windows that stay where you need them.
+
+Brain dumps. Tiny wins. And a corner you can actually peel.
+
+No account. No cloud.
+
+Watch the peel. Try the early preview:
+https://github.com/dhruvil-codes/stickly

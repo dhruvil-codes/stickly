@@ -19,18 +19,15 @@ def effects():
             envelope = math.exp(-t * 48) * min(1, t / .003)
             value = gain * envelope * (math.sin(2*math.pi*pitch*t) + .3*math.sin(2*math.pi*pitch*2.03*t))
             if start+n < len(samples): samples[start+n] += value
-    for at, pitch, gain in [(0.35,390,.08),(17.8,230,.14),(8.8,780,.075),(9.5,850,.075),(10.8,530,.05),(11.3,570,.05),(11.8,610,.05),(12.7,450,.05),(20.4,320,.06),(23.05,520,.045),(23.13,590,.04),(24.0,410,.065),(28.2,392,.07),(28.4,588,.055)]:
+    for at, pitch, gain in [(0.03,390,.18),(.24,510,.11),(.5,620,.09),(3.28,180,.15),(4.18,620,.18),(9.2,780,.18),(10.82,850,.2),(11.58,530,.13),(12.08,610,.12),(16.95,230,.26),(18.38,320,.16),(19.22,720,.15),(21.52,490,.13),(22.42,570,.13),(24.62,392,.16),(25.9,588,.13),(26.07,784,.12)]:
         tap(at,pitch,gain)
     rng = random.Random(21)
-    low = slower = 0.0
-    start = int(13.4 * RATE)
-    count = int(2.5 * RATE)
-    for n in range(count):
-        noise = rng.uniform(-1,1)
-        low = .72*low + .28*noise
-        slower = .96*slower + .04*noise
-        envelope = math.sin(math.pi * n/count) ** 1.5
-        samples[start+n] += (low-slower) * envelope * .055
+    for at in [1.05,4.08,8.15,13.23,18.28,21.4,24.5]:
+        low=0.0; count=int(.2*RATE); start=int(at*RATE)
+        for n in range(count):
+            low=.8*low+.2*rng.uniform(-1,1)
+            samples[start+n]+=low*math.sin(math.pi*n/count)**2*.10
+
     pcm = array.array('h')
     for value in samples:
         v = max(-.7,min(.7,value))
