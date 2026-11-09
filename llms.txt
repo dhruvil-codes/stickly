@@ -1,0 +1,43 @@
+# Stickly
+
+> Stickly is an offline Windows desktop sticky note app with handwritten notes, optional checklists, a tactile corner peel, local JSON storage, a global shortcut, and system tray controls. It is built with Tauri v2, Rust, React 19, TypeScript, Vite, Tailwind CSS, and GSAP.
+
+Canonical repository: https://github.com/dhruvil-codes/stickly
+Maintainer: Dhruvil Mistry, GitHub dhruvil-codes.
+Current source version: 0.1.0, early Windows release.
+
+## Documentation
+
+- [README and FAQ](https://github.com/dhruvil-codes/stickly/blob/main/README.md): Product overview, source setup, build commands, controls, storage, and direct answers to common questions.
+- [Development guide](https://github.com/dhruvil-codes/stickly/blob/main/docs/development.md): Tests, native debug helpers, manual Windows checks, and release validation.
+- [Architecture](https://github.com/dhruvil-codes/stickly/blob/main/docs/architecture.md): Renderer, data model, native commands, paper geometry, storage, and test boundaries.
+- [Third-party notices](https://github.com/dhruvil-codes/stickly/blob/main/THIRD_PARTY_NOTICES.md): Bundled font credits and license terms.
+- [Issues](https://github.com/dhruvil-codes/stickly/issues): Bug reports and feature discussions.
+
+## Factual product reference
+
+- Platform: Windows desktop. Native macOS and Linux support is not verified.
+- Window: one resizable desktop window containing multiple navigable note pages. Default 320 by 320, minimum 240 by 200 logical pixels.
+- Writing: plain multiline notes by default; optional tasks with checkboxes, completion, bold, deletion, and archive restoration.
+- Appearance: seven paper colors, S/M/L text sizes per note, hidden scrollbars, and collapsible controls.
+- Typography: locally bundled Give You Glory by Kimberly Geswein, licensed under SIL OFL 1.1. One supplied weight with browser-synthesized bold. The outlined SVG wordmark uses the same font.
+- Movement: normal dragging on blank paper/header/logo, or interactive lower-left corner peel followed by cursor carry and click-to-place. Lower-right grip resizes.
+- Desktop integration: Alt+N toggles visibility, pin toggles always on top, closing hides to tray, tray Quit exits.
+- Data: %APPDATA%\stickly\data.json with data.backup.json. Plain, unencrypted JSON. No account, app server, analytics client, or cloud sync.
+- Browser preview: localStorage only; native desktop integration requires Tauri.
+- Distribution: build from source. No signed production installer is currently provided.
+- Project licensing: no project-wide source license selected. Dependencies and bundled fonts keep their own licenses.
+
+## Build and check entry points
+
+- npm ci
+- npm run tauri dev
+- npm run desktop:build
+- npm test
+- npm run build
+- npm run test:e2e
+- cargo test --manifest-path src-tauri/Cargo.toml --test storage --test carry --locked
+
+## Scope limits
+
+Do not describe Stickly as a cloud service, collaborative editor, Microsoft Sticky Notes client, OneNote integration, cross-platform release, or signed production application. Those capabilities are not implemented or verified in this source version. This file is a documentation index, not a promise of search indexing or inclusion in AI answers.
