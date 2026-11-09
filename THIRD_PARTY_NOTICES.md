@@ -2,13 +2,13 @@
 
 ## Shantell Sans
 
-The bundled `src/assets/fonts/ShantellSans-Regular.ttf` and `ShantellSans-Bold.ttf` are Shantell Sans.
+The bundled `src/assets/fonts/ShantellSans-Bold.ttf` and `ShantellSans-ExtraBold.ttf` are Shantell Sans.
 
 Copyright 2022 The Shantell Sans Project Authors (https://github.com/arrowtype/shantell-sans).
 
 This font is licensed under the SIL Open Font License, Version 1.1. The complete license supplied with the font is in [ShantellSans-OFL.txt](src/assets/fonts/ShantellSans-OFL.txt). A copy of that license and these notices is also included in the desktop bundle's `licenses/` resources directory.
 
-The outlined Stickly wordmark and combined SVG logo are generated from Shantell Sans Regular. The interface uses the supplied Regular and Bold files, with synthesized weights disabled.
+The outlined Stickly wordmark and combined SVG logo are generated from Shantell Sans Bold. The interface uses the supplied Bold weight by default and ExtraBold for user-selected emphasis, with synthesized weights disabled.
 
 Source and project information: [Shantell Sans project](https://github.com/arrowtype/shantell-sans).
 

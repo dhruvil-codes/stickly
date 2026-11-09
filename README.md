@@ -27,7 +27,7 @@ Built with **Tauri v2, Rust, React 19, TypeScript, and GSAP**. Notes stay on you
 | Compact, resizable window | Starts at 320 × 320 logical pixels, with a 240 × 200 minimum. The lower-right grip resizes separately from peeling. |
 | Collapsible controls | The three-dot button folds the toolbar into one control. Compact page navigation stays at the bottom. |
 | Paper colors | Classic yellow, pastel peach, blush pink, mint green, sky blue, lavender, and charcoal. |
-| Text size and bold | Choose S, M, or L per note. Ctrl+B toggles bold in the active note body or task. |
+| Text size and emphasis | Choose S, M, or L per note. Writing is bold by default; Ctrl+B toggles extra-bold emphasis in the active note body or task. |
 | History and archive | Restore completed tasks and archived notes, or clear history with confirmation. |
 | Desktop controls | Alt+N toggles visibility. Pin a note above other windows, or use the system tray to show, hide, create, and quit. |
 | Local persistence | Rust saves notes and preferences to a local JSON file, with atomic replacement and a previous-snapshot backup. |
@@ -82,7 +82,7 @@ Open `http://localhost:1420`. The browser preview stores notes in localStorage. 
 | Expand the toolbar | Click the three-dot button. Stickly remembers the choice. |
 | Add a task | Click Add a task in the expanded toolbar. |
 | Add the next task | Press Enter in a task. Shift+Enter adds a line break. |
-| Toggle bold | Ctrl+B in the active task or note body. |
+| Toggle extra-bold emphasis | Ctrl+B in the active task or note body. |
 | Remove a task | Click its hover-revealed delete button, or Backspace on an empty task. |
 | Delete the current note | Use the trash button. Nonempty notes ask for confirmation. |
 | Archive a note | Open History and archive, then Archive this note. |
@@ -170,13 +170,13 @@ Windows is the current desktop target. The compact controls take inspiration fro
 
 ## Fonts and artwork
 
-**Shantell Sans** is bundled locally for all interface text, note writing, and the wordmark. Regular and Bold use the font's supplied weights. The app does not fetch fonts at runtime. The font is distributed under the [SIL Open Font License 1.1](src/assets/fonts/ShantellSans-OFL.txt), with credits in [third-party notices](THIRD_PARTY_NOTICES.md). Personal-use Matcha Salt files are excluded from the public repository.
+**Shantell Sans Bold (700)** is the default for interface text, note writing, and the wordmark. Ctrl+B adds emphasis with the supplied **ExtraBold (800)** weight. Both weights are bundled locally, with no synthesized bold or runtime font downloads. The font is distributed under the [SIL Open Font License 1.1](src/assets/fonts/ShantellSans-OFL.txt), with credits in [third-party notices](THIRD_PARTY_NOTICES.md). Personal-use Matcha Salt files are excluded from the public repository.
 
 The original [SVG note mark](public/stickly.svg), [outlined wordmark](public/stickly-wordmark.svg), and [complete logo](public/stickly-logo.svg) live in `public/`. To regenerate the outlined artwork, install Python and FontTools, then run:
 
 ```powershell
 python -m pip install fonttools
-python scripts/create-wordmark.py --font src/assets/fonts/ShantellSans-Regular.ttf
+python scripts/create-wordmark.py --font src/assets/fonts/ShantellSans-Bold.ttf
 ```
 
 ## Project licensing

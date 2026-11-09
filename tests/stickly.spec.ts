@@ -9,15 +9,17 @@ test('plain notes are the default, with multiline editing, bold and persistence'
   await expect(page.getByLabel('Note title')).toHaveValue('');
   await expect(page.getByRole('checkbox')).toHaveCount(0);
   const body = page.getByLabel('Note text');
+  await expect(body).toHaveCSS('font-weight', '700');
   await body.fill('An idea worth keeping.\nA second thought.');
   await body.press('Control+b');
-  await expect(body).toHaveCSS('font-weight', '700');
+  await expect(body).toHaveCSS('font-weight', '800');
   await expect(page.getByRole('status').filter({ hasText: 'All tucked in' })).toBeVisible();
   await page.reload();
   await expect(body).toHaveValue('An idea worth keeping.\nA second thought.');
-  await expect(body).toHaveCSS('font-weight', '700');
+  await expect(body).toHaveCSS('font-weight', '800');
   await page.getByRole('button', { name: 'New note', exact: true }).click();
   await expect(body).toHaveValue('');
+  await expect(body).toHaveCSS('font-weight', '700');
   await expect(body).toBeFocused();
   await page.getByRole('button', { name: 'Previous note' }).click();
   await expect(body).toHaveValue('An idea worth keeping.\nA second thought.');
@@ -28,8 +30,9 @@ test('optional checklist CRUD, Enter, bold and seven paper colors', async ({ pag
   await page.getByLabel('Note text').fill('Keep the paragraph alongside the checklist.');
   await page.getByRole('button', { name: 'Add a task', exact: true }).click();
   const task = page.getByRole('textbox', { name: 'Task 1', exact: true });
-  await expect(task).toBeFocused(); await task.fill('Build something lovely'); await task.press('Control+b');
   await expect(task).toHaveCSS('font-weight', '700');
+  await expect(task).toBeFocused(); await task.fill('Build something lovely'); await task.press('Control+b');
+  await expect(task).toHaveCSS('font-weight', '800');
   await task.press('Enter');
   await expect(page.getByRole('textbox', { name: 'Task 2', exact: true })).toBeFocused();
   await page.getByRole('textbox', { name: 'Task 2', exact: true }).press('Backspace');
@@ -282,8 +285,8 @@ test('failed writes keep edits visible and can be retried', async ({ page }) => 
 
 test('S M L sizes persist per note and the bundled Shantell Sans font loads throughout', async ({ page }) => {
   await page.goto('/');
-  expect(await page.evaluate(async () => (await document.fonts.load('19px "Shantell Sans"')).length)).toBe(1);
   expect(await page.evaluate(async () => (await document.fonts.load('700 19px "Shantell Sans"')).length)).toBe(1);
+  expect(await page.evaluate(async () => (await document.fonts.load('800 19px "Shantell Sans"')).length)).toBe(1);
   await page.getByLabel('Note text').fill('A small thought becomes a big idea.');
   await page.getByRole('button', { name: 'Add a task', exact: true }).click();
   await page.getByRole('textbox', { name: 'Task 1', exact: true }).fill('Keep the line wrapped neatly');
@@ -306,6 +309,7 @@ test('S M L sizes persist per note and the bundled Shantell Sans font loads thro
   await page.getByRole('button', { name: 'History and archive' }).click();
   for (const selector of ['.drawer-heading h2', '.drawer-heading p', '.drawer-footer button', '.note-navigation', '.new-note']) {
     expect(await page.locator(selector).first().evaluate(el => getComputedStyle(el).fontFamily)).toContain('Shantell Sans');
+    await expect(page.locator(selector).first()).toHaveCSS('font-weight', '700');
   }
   await expect(page.locator('.empty-history p')).toBeInViewport();
   await page.screenshot({ path: 'test-results/handwritten-history.png', omitBackground: true });

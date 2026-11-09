@@ -20,7 +20,7 @@ Current source version: 0.1.0, early Windows release.
 - Window: one resizable desktop window containing multiple navigable note pages. Default 320 by 320, minimum 240 by 200 logical pixels.
 - Writing: plain multiline notes by default; optional tasks with checkboxes, completion, bold, deletion, and archive restoration.
 - Appearance: seven paper colors, S/M/L text sizes per note, hidden scrollbars, and collapsible controls.
-- Typography: locally bundled Shantell Sans, licensed under SIL OFL 1.1, with supplied Regular and Bold weights. The outlined SVG wordmark uses the same font.
+- Typography: locally bundled Shantell Sans, licensed under SIL OFL 1.1. Bold (700) is the default across the interface and notes; Ctrl+B toggles ExtraBold (800) emphasis. The outlined SVG wordmark uses Bold.
 - Movement: normal dragging on blank paper/header/logo, or interactive lower-left corner peel followed by cursor carry and click-to-place. Lower-right grip resizes.
 - Desktop integration: Alt+N toggles visibility, pin toggles always on top, closing hides to tray, tray Quit exits.
 - Data: %APPDATA%\stickly\data.json with data.backup.json. Plain, unencrypted JSON. No account, app server, analytics client, or cloud sync.
