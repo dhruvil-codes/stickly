@@ -1,16 +1,16 @@
 # Third-party notices
 
-## Give You Glory
+## Shantell Sans
 
-The bundled `src/assets/fonts/GiveYouGlory-Regular.ttf` is Give You Glory by Kimberly Geswein.
+The bundled `src/assets/fonts/ShantellSans-Regular.ttf` and `ShantellSans-Bold.ttf` are Shantell Sans.
 
-Copyright (c) 2010, Kimberly Geswein (kimberlygeswein.com).
+Copyright 2022 The Shantell Sans Project Authors (https://github.com/arrowtype/shantell-sans).
 
-This font is licensed under the SIL Open Font License, Version 1.1. The complete license supplied with the font is in [GiveYouGlory-OFL.txt](src/assets/fonts/GiveYouGlory-OFL.txt). A copy of that license and these notices is also included in the desktop bundle's `licenses/` resources directory.
+This font is licensed under the SIL Open Font License, Version 1.1. The complete license supplied with the font is in [ShantellSans-OFL.txt](src/assets/fonts/ShantellSans-OFL.txt). A copy of that license and these notices is also included in the desktop bundle's `licenses/` resources directory.
 
-The outlined Stickly wordmark and combined SVG logo are generated from this font. Give You Glory has one supplied weight. The interface uses browser-synthesized bold when the user selects bold text.
+The outlined Stickly wordmark and combined SVG logo are generated from Shantell Sans Regular. The interface uses the supplied Regular and Bold files, with synthesized weights disabled.
 
-Source and project information: [Give You Glory on Google Fonts](https://fonts.google.com/specimen/Give+You+Glory), [Kimberly Geswein Fonts](https://www.kimberlygeswein.com/).
+Source and project information: [Shantell Sans project](https://github.com/arrowtype/shantell-sans).
 
 ## Original Stickly artwork
 

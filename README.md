@@ -13,7 +13,7 @@ Built with **Tauri v2, Rust, React 19, TypeScript, and GSAP**. Notes stay on you
 > Version 0.1.0 is an early Windows release. Build from source using the instructions below. This repository does not currently provide a signed production installer. macOS and Linux desktop support have not been verified.
 
 <p align="center">
-  <img src="docs/images/stickly-note.png" alt="Stickly Windows sticky note with Give You Glory handwriting, a compact toolbar, and note navigation on yellow paper" width="320" height="320">
+  <img src="docs/images/stickly-note.png" alt="Stickly Windows sticky note with Shantell Sans handwriting, a compact toolbar, and note navigation on yellow paper" width="320" height="320">
 </p>
 
 ## What Stickly does
@@ -170,13 +170,13 @@ Windows is the current desktop target. The compact controls take inspiration fro
 
 ## Fonts and artwork
 
-**Give You Glory**, by Kimberly Geswein, is bundled locally for all interface text, note writing, and the wordmark. The app does not fetch fonts at runtime. The supplied font has one weight, so bold uses browser synthesis. The font is distributed under the [SIL Open Font License 1.1](src/assets/fonts/GiveYouGlory-OFL.txt), with credits in [third-party notices](THIRD_PARTY_NOTICES.md). Personal-use Matcha Salt files are excluded from the public repository.
+**Shantell Sans** is bundled locally for all interface text, note writing, and the wordmark. Regular and Bold use the font's supplied weights. The app does not fetch fonts at runtime. The font is distributed under the [SIL Open Font License 1.1](src/assets/fonts/ShantellSans-OFL.txt), with credits in [third-party notices](THIRD_PARTY_NOTICES.md). Personal-use Matcha Salt files are excluded from the public repository.
 
 The original [SVG note mark](public/stickly.svg), [outlined wordmark](public/stickly-wordmark.svg), and [complete logo](public/stickly-logo.svg) live in `public/`. To regenerate the outlined artwork, install Python and FontTools, then run:
 
 ```powershell
 python -m pip install fonttools
-python scripts/create-wordmark.py --font src/assets/fonts/GiveYouGlory-Regular.ttf
+python scripts/create-wordmark.py --font src/assets/fonts/ShantellSans-Regular.ttf
 ```
 
 ## Project licensing

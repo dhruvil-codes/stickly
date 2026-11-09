@@ -1,7 +1,8 @@
 @import "tailwindcss";
 
-@font-face { font-family: 'Give You Glory'; src: url('./assets/fonts/GiveYouGlory-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
-:root { font-family: 'Give You Glory', cursive; font-synthesis: weight; font-size: 14px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; color: #46391b; background: transparent; }
+@font-face { font-family: 'Shantell Sans'; src: url('./assets/fonts/ShantellSans-Regular.ttf') format('truetype'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Shantell Sans'; src: url('./assets/fonts/ShantellSans-Bold.ttf') format('truetype'); font-weight: 700; font-style: normal; font-display: swap; }
+:root { font-family: 'Shantell Sans', cursive; font-synthesis: none; font-size: 14px; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; color: #46391b; background: transparent; }
 * { box-sizing: border-box; }
 html, body, #root { width: 100%; height: 100%; margin: 0; overflow: hidden; background: transparent; }
 button, input, textarea { font: inherit; color: inherit; }
@@ -24,7 +25,7 @@ svg { flex-shrink: 0; }
 .note-layout { height: 100%; display: flex; flex-direction: column; position: relative; background: linear-gradient(165deg, #ffffff22, transparent 55%); box-shadow: inset 0 0 0 1px #0000000a; border-radius: 12px; }
 .note-toolbar { min-height: 38px; flex-shrink: 0; padding: 5px 8px; position: relative; z-index: 4; border-bottom: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); background: linear-gradient(#ffffff35, #ffffff12); }
 .wordmark { display: flex; align-items: center; gap: 5px; flex-shrink: 0; }
-.wordmark > span { font-family: 'Give You Glory', cursive; font-weight: 400; font-size: 23px; line-height: 1; letter-spacing: -.6px; }
+.wordmark > span { font-family: 'Shantell Sans', cursive; font-weight: 400; font-size: 23px; line-height: 1; letter-spacing: -.6px; }
 .logo-drag { width: 24px; height: 26px; display: grid; place-items: center; cursor: grab; border-radius: 7px; }
 .logo-drag img { pointer-events: none; }
 .logo-drag:active { cursor: grabbing; }
@@ -116,9 +117,9 @@ svg { flex-shrink: 0; }
 .history-scroll { min-height: 0; flex: 1; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; padding: 3px; margin: 0 -3px; }
 .section-caption { margin: 17px 0 9px; font-size: 13px; font-weight: 400; opacity: .6; }
 .history-group { margin-bottom: 14px; }
-.history-group h4, .archived-note h4 { margin: 0 0 4px; font-size: 18px; font-family: 'Give You Glory', cursive; font-weight: 400; overflow-wrap: anywhere; }
+.history-group h4, .archived-note h4 { margin: 0 0 4px; font-size: 18px; font-family: 'Shantell Sans', cursive; font-weight: 400; overflow-wrap: anywhere; }
 .history-task { display: flex; align-items: center; gap: 7px; padding: 3px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); }
-.history-task > span { flex: 1; min-width: 0; font-family: 'Give You Glory', cursive; font-size: 18px; opacity: .65; overflow-wrap: anywhere; }
+.history-task > span { flex: 1; min-width: 0; font-family: 'Shantell Sans', cursive; font-size: 18px; opacity: .65; overflow-wrap: anywhere; }
 .history-task > svg { opacity: .65; }
 .archived-note { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 8%, transparent); }
 .archived-note > div { flex: 1; min-width: 0; }
@@ -144,7 +145,7 @@ svg { flex-shrink: 0; }
 .error-toast > div { margin-top: 8px; display: flex; justify-content: flex-end; gap: 12px; }
 .error-toast button { text-decoration: underline; }
 .loading-card, .browser-hidden { height: 100%; padding: 28px; background: #fef08a; border-radius: 12px; }
-.loading-card h1 { font-family: 'Give You Glory', cursive; font-size: 26px; margin: 6px 0 16px; }
+.loading-card h1 { font-family: 'Shantell Sans', cursive; font-size: 26px; margin: 6px 0 16px; }
 .loading-card p, .browser-hidden p { font-size: 15px; line-height: 1.4; display: flex; align-items: center; gap: 8px; }
 .loading-card button, .browser-hidden button { padding: 9px 13px; border-radius: 7px; color: #fff7da; background: #46391b; font-size: 14px; }
 .browser-hidden small { display: block; margin-top: 18px; font-size: 13px; }

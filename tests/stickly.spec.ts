@@ -280,9 +280,10 @@ test('failed writes keep edits visible and can be retried', async ({ page }) => 
   await page.reload(); await expect(page.getByLabel('Note text')).toHaveValue('Keep this idea safe');
 });
 
-test('S M L sizes persist per note and the bundled Give You Glory font loads throughout', async ({ page }) => {
+test('S M L sizes persist per note and the bundled Shantell Sans font loads throughout', async ({ page }) => {
   await page.goto('/');
-  expect(await page.evaluate(async () => (await document.fonts.load('19px "Give You Glory"')).length)).toBe(1);
+  expect(await page.evaluate(async () => (await document.fonts.load('19px "Shantell Sans"')).length)).toBe(1);
+  expect(await page.evaluate(async () => (await document.fonts.load('700 19px "Shantell Sans"')).length)).toBe(1);
   await page.getByLabel('Note text').fill('A small thought becomes a big idea.');
   await page.getByRole('button', { name: 'Add a task', exact: true }).click();
   await page.getByRole('textbox', { name: 'Task 1', exact: true }).fill('Keep the line wrapped neatly');
@@ -304,7 +305,7 @@ test('S M L sizes persist per note and the bundled Give You Glory font loads thr
   await expect(page.getByLabel('Note text')).toHaveCSS('font-size', '23px');
   await page.getByRole('button', { name: 'History and archive' }).click();
   for (const selector of ['.drawer-heading h2', '.drawer-heading p', '.drawer-footer button', '.note-navigation', '.new-note']) {
-    expect(await page.locator(selector).first().evaluate(el => getComputedStyle(el).fontFamily)).toContain('Give You Glory');
+    expect(await page.locator(selector).first().evaluate(el => getComputedStyle(el).fontFamily)).toContain('Shantell Sans');
   }
   await expect(page.locator('.empty-history p')).toBeInViewport();
   await page.screenshot({ path: 'test-results/handwritten-history.png', omitBackground: true });

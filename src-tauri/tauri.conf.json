@@ -34,7 +34,7 @@
     "active": true,
     "targets": "all",
     "resources": {
-      "../src/assets/fonts/GiveYouGlory-OFL.txt": "licenses/GiveYouGlory-OFL.txt",
+      "../src/assets/fonts/ShantellSans-OFL.txt": "licenses/ShantellSans-OFL.txt",
       "../THIRD_PARTY_NOTICES.md": "licenses/THIRD_PARTY_NOTICES.md"
     },
     "icon": [
