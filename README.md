@@ -1,49 +1,46 @@
-<p align="center">
-  <img src="public/stickly.svg" alt="Stickly sticky note icon" width="72" height="72">
-</p>
+# Stickly
 
-# Stickly: offline sticky notes for Windows
+### A little corner for what matters next.
 
-Stickly is a compact Windows desktop sticky note app for quick thoughts, reminders, and optional to-do lists. Write directly on handwritten paper, keep a note always on top, or peel it from a corner and place it somewhere else on your desktop.
-
-Built with **Tauri v2, Rust, React 19, TypeScript, and GSAP**. Notes stay on your computer. No account or cloud service is required.
-
-[Get started](#run-stickly-from-source) · [Controls](#everyday-controls) · [FAQ](#frequently-asked-questions) · [Development](docs/development.md) · [Architecture](docs/architecture.md)
-
-> Version 0.1.0 is an early Windows release. Build from source using the instructions below. This repository does not currently provide a signed production installer. macOS and Linux desktop support have not been verified.
+A thousand things on your mind? Give the next one a little paper. Stickly is a Windows desktop sticky note app for quick thoughts and optional checklists. Pick a paper color, pin a note above other windows, or peel it up and place it somewhere new. Your notes stay in local files on your PC.
 
 <p align="center">
-  <img src="docs/images/stickly-note.png" alt="Stickly Windows sticky note with Shantell Sans handwriting, a compact toolbar, and note navigation on yellow paper" width="320" height="320">
+  <a href="docs/media/stickly-launch.mp4"><img src="docs/media/launch-poster.png" alt="Watch the 30-second Stickly launch film, including the real corner peel" width="100%"></a><br>
+  <a href="docs/media/stickly-launch.mp4">Watch the 30-second launch film</a> | <a href="docs/media/README.md">Screenshots and social assets</a>
 </p>
 
-## What Stickly does
+Early Windows preview. [Build from source](#build-from-source) to try it; see [known limits](#known-limits) for release and licensing details.
 
-| Feature | Behavior |
-| --- | --- |
-| Plain notes | Write multiline text with an editable title. Add checklists only when you need them. |
-| Optional to-do lists | Add, edit, complete, reopen, and delete tasks. Completed items have a hand-drawn strikethrough. |
-| Tactile paper peel | Pull the lower-left corner at your own pace. A fully detached, curled note follows the cursor until you click to place it. |
-| Normal window dragging | Drag blank paper, the header, or the logo mark. Editors and buttons keep their usual interactions. |
-| Compact, resizable window | Starts at 320 × 320 logical pixels, with a 240 × 200 minimum. The lower-right grip resizes separately from peeling. |
-| Collapsible controls | The three-dot button folds the toolbar into one control. Compact page navigation stays at the bottom. |
-| Paper colors | Classic yellow, pastel peach, blush pink, mint green, sky blue, lavender, and charcoal. |
-| Text size and emphasis | Choose S, M, or L per note. Writing is bold by default; Ctrl+B toggles extra-bold emphasis in the active note body or task. |
-| History and archive | Restore completed tasks and archived notes, or clear history with confirmation. |
-| Desktop controls | Alt+N toggles visibility. Pin a note above other windows, or use the system tray to show, hide, create, and quit. |
-| Local persistence | Rust saves notes and preferences to a local JSON file, with atomic replacement and a previous-snapshot backup. |
+[Build it](#build-from-source) · [See the controls](#quick-controls) · [Roadmap](docs/roadmap.md) · [Development guide](docs/development.md)
 
-Overflowing content scrolls with the mouse wheel, trackpad, or keyboard. Scrollbars stay hidden, and text wraps within the note width. The interface respects reduced-motion preferences.
+## A note can be a note
 
-## Run Stickly from source
+Start with a blank page. Add a checklist when you need one. Give each note a color and text size, then use the small page controls to move between notes in the same window.
 
-### Windows prerequisites
+| A quiet place for a thought | A short list for what's next |
+|:--:|:--:|
+| ![Plain handwritten note on yellow paper](docs/images/plain-note.png) | ![Checklist on a sticky note](docs/images/checklist.png) |
+| Plain note | Optional checklist |
+| ![Pastel paper color choices](docs/images/paper-colors.png) | ![Charcoal paper note](docs/images/charcoal.png) |
+| Pastel paper colors | Charcoal paper |
+| ![History drawer with completed tasks and archived notes](docs/images/history.png) | ![A note peeling from its corner](docs/images/peel.png) |
+| Bring back a finished task or old note | Peel, carry, and place |
 
-- Node.js 22.12 or newer and npm.
-- The current stable Rust toolchain, installed with [rustup](https://rustup.rs/).
-- Microsoft C++ Build Tools with the Desktop development with C++ workload and Windows SDK.
-- Microsoft Edge WebView2 Runtime.
+## What it does today
 
-Follow the official [Tauri Windows setup guide](https://v2.tauri.app/start/prerequisites/#windows) for native dependencies. The first dependency installation and Rust compilation require internet access.
+- Write a title and multiline note, with optional checklist items.
+- Mark tasks complete, reopen them later, and archive or restore whole notes.
+- Choose from seven paper colors and three text sizes.
+- Keep the note above other windows, or hide and show it with **Alt+N**.
+- Drag the lower-left corner to peel a note away, carry it, and click to place it. Press **Escape** to cancel while carrying.
+- Use one compact window with previous and next controls to move between notes.
+- Save notes locally in JSON, with a previous-save backup.
+
+Writing uses the bundled Shantell Sans **Bold 700** weight. **Ctrl+B** switches the active note text or task to **ExtraBold 800**. There is no account or cloud sync.
+
+## Build from source
+
+Stickly is an early Windows desktop app. To try it, install Node.js 22.12 or newer, Rust stable, Microsoft C++ Build Tools with the Desktop development with C++ workload, and the WebView2 Runtime. See the official [Tauri Windows prerequisites](https://v2.tauri.app/start/prerequisites/#windows).
 
 ```powershell
 git clone https://github.com/dhruvil-codes/stickly.git
@@ -52,139 +49,83 @@ npm ci
 npm run tauri dev
 ```
 
-### Build a Windows installer
+The first install and Rust build need internet access. After that, Stickly works offline. For a local browser preview instead, run `npm run dev`; that preview saves to browser localStorage and does not include Windows shortcuts, tray controls, pinning, or native file storage.
 
-```powershell
-npm run desktop:build
-```
+To build the Windows executable and NSIS installer, run `npm run desktop:build`. Build outputs are under `src-tauri/target/release/`. They are unsigned unless you configure code signing.
 
-The release executable is `src-tauri/target/release/stickly.exe`. The NSIS installer is generated under `src-tauri/target/release/bundle/nsis/`.
+## Quick controls
 
-Builds are unsigned unless the distributor configures code signing. A production distribution still needs signing and native validation on its supported Windows versions and display configurations.
+| Do this | With this |
+|---|---|
+| Show or hide the app | **Alt+N**, or use the system tray |
+| Create a note | **Ctrl+N**, New note, or the tray menu |
+| Move between notes | Use the small arrows and page counter at the bottom |
+| Move the window | Drag blank paper, the header, or the logo |
+| Resize the window | Drag the lower-right grip |
+| Add a task | Expand the toolbar and choose Add a task |
+| Change paper or text size | Expand the toolbar and open the picker |
+| Keep the note in front | Use the pin control |
+| Archive a note | Open History and choose Archive this note |
+| Delete a note | Expand the toolbar, choose the trash control, then confirm |
+| Quit the app | Choose Quit in the tray menu; closing the note hides it |
 
-### Browser development
+To move a note, pull its lower-left corner until the whole sheet lifts. Release, move to the new spot, then click to place. A short pull springs back. **Escape** cancels a carried note and restores its previous position. The placement click does not pass through to another app.
 
-```powershell
-npm run dev
-```
+## Your notes and your files
 
-Open `http://localhost:1420`. The browser preview stores notes in localStorage. Global shortcuts, the tray, pinning, native window movement, and JSON file persistence require the Tauri desktop app.
-
-## Everyday controls
-
-| Action | How |
-| --- | --- |
-| Show or hide Stickly | Alt+N from any app, or Show / Hide in the tray menu. |
-| Create a note | New note, Ctrl+N, or New Note in the tray menu. |
-| Switch notes | Use the small previous/next arrows around the page counter. |
-| Move the window | Drag blank paper, the header, or the logo mark. |
-| Resize | Drag the lower-right grip. |
-| Expand the toolbar | Click the three-dot button. Stickly remembers the choice. |
-| Add a task | Click Add a task in the expanded toolbar. |
-| Add the next task | Press Enter in a task. Shift+Enter adds a line break. |
-| Toggle extra-bold emphasis | Ctrl+B in the active task or note body. |
-| Remove a task | Click its hover-revealed delete button, or Backspace on an empty task. |
-| Delete the current note | Use the trash button. Nonempty notes ask for confirmation. |
-| Archive a note | Open History and archive, then Archive this note. |
-| Keep a note above other apps | Use the pin control. |
-| Choose paper or text size | Open Paper color or Text size. Click the note to close the picker. |
-| Quit completely | Choose Quit in the tray menu. Closing the note hides it to the tray. |
-
-With the logo or resize grip focused, arrow keys move or resize in 10-pixel steps. Shift+arrow uses 1-pixel steps.
-
-### Peel and place a note
-
-1. Grab the lower-left paper corner and pull inward. The crease follows the distance and direction of your drag. Pause to hold it, or reverse the drag to undo it.
-2. Release a short pull to let the corner spring flat. Keep pulling to detach the entire sheet.
-3. Once detached, the half-curled sticker stays attached to the cursor. Release the mouse button, move to a new spot, and click to apply it there.
-4. Press Escape during carry to return to the original position.
-
-Space on the focused peel corner starts the keyboard version. Alt-drag can start peeling over an editor. During native carry, temporary Windows mouse and Escape hooks track placement and cancellation. The placement click is consumed so it does not activate the app underneath.
-
-## Local storage and privacy
-
-The desktop app saves its data here:
+The Windows app stores data here:
 
 ```text
 %APPDATA%\stickly\data.json
 %APPDATA%\stickly\data.backup.json
 ```
 
-The save contains note titles and text, tasks, colors, text sizes, archive history, pin state, and physical window position. The backup holds the previous successful snapshot. Window size is not currently persisted.
+These plain JSON files contain note text, tasks, colors, text sizes, archive history, pin state, and the window position. They are not encrypted. Stickly has no application server, analytics client, or cloud sync. Window size is not saved yet.
 
-Stickly validates save data before loading it. Rust serializes background writes and replaces files atomically. An unreadable or incompatible save is left untouched rather than overwritten. Tray Quit flushes pending saves before exiting.
+Rust validates saves, writes them atomically, and keeps the previous successful snapshot as `data.backup.json`. If the current file cannot be read, Stickly leaves it untouched rather than overwriting it.
 
-These files are **plain JSON, not encrypted**. Protect them with your Windows account and disk security. Stickly has no application server, analytics client, or cloud sync. Browser-preview data is separate from desktop data.
+To restore the backup, quit Stickly first. Copy both files somewhere safe, keep the existing `data.json`, then copy `data.backup.json` over `data.json`. Keep a copy of the full folder before changing saved files.
 
-To recover a backup, quit Stickly, copy both files somewhere safe, preserve the damaged `data.json`, and copy `data.backup.json` to `data.json`. Back up the whole directory before editing or moving saved data.
+## Known limits
 
-## Development and validation
+- Windows is the only verified desktop target. macOS and Linux builds are not verified or distributed.
+- This is an early release. There is no signed production installer or automatic updater.
+- Stickly uses one app window for all notes; separate note windows are not available.
+- Notes live on this PC. There is no sync, account, or Microsoft Sticky Notes import.
+- The project has not selected a license for its own source code. Third-party fonts and packages keep their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).
 
-```powershell
-npm test
-npm run build
-npm run test:e2e
-cargo test --manifest-path src-tauri/Cargo.toml --test storage --test carry --locked
-cargo clippy --manifest-path src-tauri/Cargo.toml --all-targets --locked -- -D warnings
-```
+## FAQ
 
-Playwright uses installed Microsoft Edge on Windows. If Edge is unavailable, install Chromium with `npx playwright install chromium`.
+### Is Stickly open source?
 
-The tests cover note and task state, save validation and migration, fold geometry, browser editing and persistence, colors and text sizes, archive restoration, pointer interactions, and Rust storage and carry transitions. Browser tests do not replace physical desktop testing of Windows global input hooks, DPI scaling, and multiple monitors.
+The source is public, but a project-wide source license has not been selected. Third-party fonts and dependencies retain their own licenses. See [third-party notices](THIRD_PARTY_NOTICES.md).
 
-See [the development guide](docs/development.md) for native test helpers, manual checks, and troubleshooting. See [the architecture guide](docs/architecture.md) for the renderer, native commands, storage, and peel geometry.
+### Where are Stickly notes stored?
 
-## Frequently asked questions
+The Windows app saves them in `%APPDATA%\stickly\data.json`. It keeps the previous successful save in `data.backup.json`. Browser preview data is stored separately in localStorage.
 
-### What is Stickly?
+### Does Stickly need an internet connection?
 
-Stickly is a Windows sticky note and to-do app built with Tauri and Rust. It combines local handwritten notes, optional checklists, an always-on-top window, and an interactive paper peel.
+The app does not need an account, server, or internet connection for everyday note taking. Installing dependencies and building from source require internet access. Windows provides the WebView2 Runtime.
 
-### Does Stickly work offline?
+### Can I use Stickly for plain notes?
 
-Yes. Once installed, note editing and desktop controls work without an account or application server. Dependency installation and builds need access to package registries. Windows manages its own WebView2 runtime separately.
+Yes. Notes start as plain text. Add a checklist only when you want one, and use both in the same note.
 
-### Where does Stickly save my notes?
+### Does each note open in its own window?
 
-The Windows desktop app saves notes in `%APPDATA%\stickly\data.json`, with the previous successful snapshot in `data.backup.json`. The browser preview uses localStorage instead.
+No. All notes live in one window. Use the arrows and page counter at the bottom to switch pages.
 
-### Does New note open a separate desktop window?
+### Does Stickly sync with Microsoft Sticky Notes or OneNote?
 
-No. This version keeps multiple notes in one desktop window. New note creates a page, and the compact page counter and arrow buttons switch between active notes.
+No. It has its own local JSON files. Import, OneNote integration, and cloud sync are not implemented.
 
-### Can I use Stickly for plain text instead of to-do lists?
+### Can I install Stickly with a signed setup file?
 
-Yes. New notes start as plain text. Add checklist items only when you want them, and keep paragraphs and tasks in the same note.
+The repository does not currently provide a signed production installer. You can build an unsigned NSIS installer from source with `npm run desktop:build`.
 
-### Can I resize Stickly or keep it always on top?
+## Fonts, artwork, and project notes
 
-Yes. Drag the lower-right resize grip and use the pin button to toggle always on top. The minimum window size is 240 × 200 logical pixels.
+Stickly bundles Shantell Sans Bold 700 and ExtraBold 800. The font is under the [SIL Open Font License 1.1](src/assets/fonts/ShantellSans-OFL.txt); credits are in [third-party notices](THIRD_PARTY_NOTICES.md). The note mark and wordmark SVGs are in `public/`.
 
-### Does Stickly replace Microsoft Sticky Notes data or sync with OneNote?
-
-No. Stickly is an independent desktop app with its own local JSON storage. Microsoft Sticky Notes import, OneNote integration, cloud sync, and collaboration are not implemented.
-
-### Is Stickly available for macOS or Linux?
-
-Windows is the current desktop target. The compact controls take inspiration from macOS, but native macOS and Linux builds are not verified or distributed.
-
-## Fonts and artwork
-
-**Shantell Sans Bold (700)** is the default for interface text, note writing, and the wordmark. Ctrl+B adds emphasis with the supplied **ExtraBold (800)** weight. Both weights are bundled locally, with no synthesized bold or runtime font downloads. The font is distributed under the [SIL Open Font License 1.1](src/assets/fonts/ShantellSans-OFL.txt), with credits in [third-party notices](THIRD_PARTY_NOTICES.md). Personal-use Matcha Salt files are excluded from the public repository.
-
-The original [SVG note mark](public/stickly.svg), [outlined wordmark](public/stickly-wordmark.svg), and [complete logo](public/stickly-logo.svg) live in `public/`. To regenerate the outlined artwork, install Python and FontTools, then run:
-
-```powershell
-python -m pip install fonttools
-python scripts/create-wordmark.py --font src/assets/fonts/ShantellSans-Bold.ttf
-```
-
-## Project licensing
-
-A project-wide source license has not been selected. Third-party fonts and dependencies retain their respective licenses; their availability does not license Stickly's own source code. See [third-party notices](THIRD_PARTY_NOTICES.md).
-
-## Contributing and reporting issues
-
-Read [the development guide](docs/development.md), keep changes focused, and include the checks you ran. Report bugs in [GitHub Issues](https://github.com/dhruvil-codes/stickly/issues) with reproduction steps, the Windows version, display scaling, and expected behavior. Use synthetic note text in screenshots and reports.
-
-For a concise factual project index, see [llms.txt](llms.txt).
+For development commands, native Windows checks, and troubleshooting, read the [development guide](docs/development.md). The [architecture guide](docs/architecture.md) maps the renderer, storage, and native peel behavior. Report reproducible bugs in [GitHub Issues](https://github.com/dhruvil-codes/stickly/issues); include Windows version and display scaling, and use synthetic note text in screenshots.

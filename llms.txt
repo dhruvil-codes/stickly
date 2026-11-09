@@ -12,6 +12,8 @@ Current source version: 0.1.0, early Windows release.
 - [Development guide](https://github.com/dhruvil-codes/stickly/blob/main/docs/development.md): Tests, native debug helpers, manual Windows checks, and release validation.
 - [Architecture](https://github.com/dhruvil-codes/stickly/blob/main/docs/architecture.md): Renderer, data model, native commands, paper geometry, storage, and test boundaries.
 - [Third-party notices](https://github.com/dhruvil-codes/stickly/blob/main/THIRD_PARTY_NOTICES.md): Bundled font credits and license terms.
+- [Launch media](https://github.com/dhruvil-codes/stickly/blob/main/docs/media/README.md): 30-second landscape launch film, screenshots, social artwork, captions, and editable video source.
+- [Proposed roadmap](https://github.com/dhruvil-codes/stickly/blob/main/docs/roadmap.md): Possible next work, not implemented capabilities or release commitments.
 - [Issues](https://github.com/dhruvil-codes/stickly/issues): Bug reports and feature discussions.
 
 ## Factual product reference

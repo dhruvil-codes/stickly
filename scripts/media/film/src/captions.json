@@ -1,0 +1,492 @@
+[
+  {
+    "text": "A ",
+    "startMs": 308,
+    "endMs": 366,
+    "timestampMs": 337,
+    "confidence": null
+  },
+  {
+    "text": "thousand ",
+    "startMs": 424,
+    "endMs": 784,
+    "timestampMs": 604,
+    "confidence": null
+  },
+  {
+    "text": "things ",
+    "startMs": 830,
+    "endMs": 1051,
+    "timestampMs": 940,
+    "confidence": null
+  },
+  {
+    "text": "on ",
+    "startMs": 1098,
+    "endMs": 1167,
+    "timestampMs": 1132,
+    "confidence": null
+  },
+  {
+    "text": "your ",
+    "startMs": 1214,
+    "endMs": 1318,
+    "timestampMs": 1266,
+    "confidence": null
+  },
+  {
+    "text": "mind? ",
+    "startMs": 1353,
+    "endMs": 1794,
+    "timestampMs": 1573,
+    "confidence": null
+  },
+  {
+    "text": "Put ",
+    "startMs": 1991,
+    "endMs": 2166,
+    "timestampMs": 2078,
+    "confidence": null
+  },
+  {
+    "text": "the ",
+    "startMs": 2200,
+    "endMs": 2270,
+    "timestampMs": 2235,
+    "confidence": null
+  },
+  {
+    "text": "next ",
+    "startMs": 2305,
+    "endMs": 2479,
+    "timestampMs": 2392,
+    "confidence": null
+  },
+  {
+    "text": "one ",
+    "startMs": 2537,
+    "endMs": 2676,
+    "timestampMs": 2606,
+    "confidence": null
+  },
+  {
+    "text": "right ",
+    "startMs": 2711,
+    "endMs": 2897,
+    "timestampMs": 2804,
+    "confidence": null
+  },
+  {
+    "text": "here. ",
+    "startMs": 2944,
+    "endMs": 3338,
+    "timestampMs": 3141,
+    "confidence": null
+  },
+  {
+    "text": "Meet ",
+    "startMs": 3640,
+    "endMs": 3826,
+    "timestampMs": 3733,
+    "confidence": null
+  },
+  {
+    "text": "Stickly. ",
+    "startMs": 3884,
+    "endMs": 4430,
+    "timestampMs": 4157,
+    "confidence": null
+  },
+  {
+    "text": "Beautiful ",
+    "startMs": 4662,
+    "endMs": 5138,
+    "timestampMs": 4900,
+    "confidence": null
+  },
+  {
+    "text": "handwritten ",
+    "startMs": 5207,
+    "endMs": 5625,
+    "timestampMs": 5416,
+    "confidence": null
+  },
+  {
+    "text": "notes ",
+    "startMs": 5672,
+    "endMs": 5881,
+    "timestampMs": 5776,
+    "confidence": null
+  },
+  {
+    "text": "for ",
+    "startMs": 5927,
+    "endMs": 6020,
+    "timestampMs": 5973,
+    "confidence": null
+  },
+  {
+    "text": "your ",
+    "startMs": 6055,
+    "endMs": 6148,
+    "timestampMs": 6101,
+    "confidence": null
+  },
+  {
+    "text": "Windows ",
+    "startMs": 6206,
+    "endMs": 6519,
+    "timestampMs": 6362,
+    "confidence": null
+  },
+  {
+    "text": "desktop. ",
+    "startMs": 6577,
+    "endMs": 7251,
+    "timestampMs": 6914,
+    "confidence": null
+  },
+  {
+    "text": "Capture ",
+    "startMs": 7611,
+    "endMs": 8029,
+    "timestampMs": 7820,
+    "confidence": null
+  },
+  {
+    "text": "ideas. ",
+    "startMs": 8075,
+    "endMs": 8783,
+    "timestampMs": 8429,
+    "confidence": null
+  },
+  {
+    "text": "Check ",
+    "startMs": 9085,
+    "endMs": 9306,
+    "timestampMs": 9195,
+    "confidence": null
+  },
+  {
+    "text": "off ",
+    "startMs": 9364,
+    "endMs": 9468,
+    "timestampMs": 9416,
+    "confidence": null
+  },
+  {
+    "text": "tasks. ",
+    "startMs": 9526,
+    "endMs": 10281,
+    "timestampMs": 9903,
+    "confidence": null
+  },
+  {
+    "text": "Pick ",
+    "startMs": 10583,
+    "endMs": 10792,
+    "timestampMs": 10687,
+    "confidence": null
+  },
+  {
+    "text": "a ",
+    "startMs": 10838,
+    "endMs": 10862,
+    "timestampMs": 10850,
+    "confidence": null
+  },
+  {
+    "text": "colour. ",
+    "startMs": 10920,
+    "endMs": 11407,
+    "timestampMs": 11163,
+    "confidence": null
+  },
+  {
+    "text": "Pin ",
+    "startMs": 11883,
+    "endMs": 12081,
+    "timestampMs": 11982,
+    "confidence": null
+  },
+  {
+    "text": "what ",
+    "startMs": 12139,
+    "endMs": 12266,
+    "timestampMs": 12202,
+    "confidence": null
+  },
+  {
+    "text": "matters. ",
+    "startMs": 12324,
+    "endMs": 12975,
+    "timestampMs": 12649,
+    "confidence": null
+  },
+  {
+    "text": "Then ",
+    "startMs": 13392,
+    "endMs": 13567,
+    "timestampMs": 13479,
+    "confidence": null
+  },
+  {
+    "text": "grab ",
+    "startMs": 13625,
+    "endMs": 13857,
+    "timestampMs": 13741,
+    "confidence": null
+  },
+  {
+    "text": "a ",
+    "startMs": 13915,
+    "endMs": 13938,
+    "timestampMs": 13926,
+    "confidence": null
+  },
+  {
+    "text": "corner. ",
+    "startMs": 13996,
+    "endMs": 14542,
+    "timestampMs": 14269,
+    "confidence": null
+  },
+  {
+    "text": "Peel ",
+    "startMs": 15018,
+    "endMs": 15308,
+    "timestampMs": 15163,
+    "confidence": null
+  },
+  {
+    "text": "it ",
+    "startMs": 15366,
+    "endMs": 15436,
+    "timestampMs": 15401,
+    "confidence": null
+  },
+  {
+    "text": "away, ",
+    "startMs": 15471,
+    "endMs": 16016,
+    "timestampMs": 15743,
+    "confidence": null
+  },
+  {
+    "text": "follow ",
+    "startMs": 16434,
+    "endMs": 16736,
+    "timestampMs": 16585,
+    "confidence": null
+  },
+  {
+    "text": "your ",
+    "startMs": 16806,
+    "endMs": 16922,
+    "timestampMs": 16864,
+    "confidence": null
+  },
+  {
+    "text": "cursor, ",
+    "startMs": 16980,
+    "endMs": 17549,
+    "timestampMs": 17264,
+    "confidence": null
+  },
+  {
+    "text": "and ",
+    "startMs": 17653,
+    "endMs": 17816,
+    "timestampMs": 17734,
+    "confidence": null
+  },
+  {
+    "text": "click ",
+    "startMs": 17897,
+    "endMs": 18153,
+    "timestampMs": 18025,
+    "confidence": null
+  },
+  {
+    "text": "to ",
+    "startMs": 18222,
+    "endMs": 18292,
+    "timestampMs": 18257,
+    "confidence": null
+  },
+  {
+    "text": "stick ",
+    "startMs": 18362,
+    "endMs": 18605,
+    "timestampMs": 18483,
+    "confidence": null
+  },
+  {
+    "text": "it ",
+    "startMs": 18652,
+    "endMs": 18721,
+    "timestampMs": 18686,
+    "confidence": null
+  },
+  {
+    "text": "somewhere ",
+    "startMs": 18780,
+    "endMs": 19139,
+    "timestampMs": 18959,
+    "confidence": null
+  },
+  {
+    "text": "new. ",
+    "startMs": 19198,
+    "endMs": 19557,
+    "timestampMs": 19377,
+    "confidence": null
+  },
+  {
+    "text": "Resize ",
+    "startMs": 20126,
+    "endMs": 20602,
+    "timestampMs": 20364,
+    "confidence": null
+  },
+  {
+    "text": "it. ",
+    "startMs": 20637,
+    "endMs": 20904,
+    "timestampMs": 20770,
+    "confidence": null
+  },
+  {
+    "text": "Restore ",
+    "startMs": 21206,
+    "endMs": 21682,
+    "timestampMs": 21444,
+    "confidence": null
+  },
+  {
+    "text": "old ",
+    "startMs": 21728,
+    "endMs": 21868,
+    "timestampMs": 21798,
+    "confidence": null
+  },
+  {
+    "text": "notes. ",
+    "startMs": 21937,
+    "endMs": 22472,
+    "timestampMs": 22204,
+    "confidence": null
+  },
+  {
+    "text": "Bring ",
+    "startMs": 22948,
+    "endMs": 23168,
+    "timestampMs": 23058,
+    "confidence": null
+  },
+  {
+    "text": "it ",
+    "startMs": 23215,
+    "endMs": 23261,
+    "timestampMs": 23238,
+    "confidence": null
+  },
+  {
+    "text": "back ",
+    "startMs": 23307,
+    "endMs": 23447,
+    "timestampMs": 23377,
+    "confidence": null
+  },
+  {
+    "text": "with ",
+    "startMs": 23482,
+    "endMs": 23598,
+    "timestampMs": 23540,
+    "confidence": null
+  },
+  {
+    "text": "Alt ",
+    "startMs": 23633,
+    "endMs": 23783,
+    "timestampMs": 23708,
+    "confidence": null
+  },
+  {
+    "text": "N. ",
+    "startMs": 23830,
+    "endMs": 24085,
+    "timestampMs": 23957,
+    "confidence": null
+  },
+  {
+    "text": "No ",
+    "startMs": 24654,
+    "endMs": 24794,
+    "timestampMs": 24724,
+    "confidence": null
+  },
+  {
+    "text": "account. ",
+    "startMs": 24840,
+    "endMs": 25293,
+    "timestampMs": 25066,
+    "confidence": null
+  },
+  {
+    "text": "No ",
+    "startMs": 25397,
+    "endMs": 25537,
+    "timestampMs": 25467,
+    "confidence": null
+  },
+  {
+    "text": "cloud. ",
+    "startMs": 25606,
+    "endMs": 26013,
+    "timestampMs": 25809,
+    "confidence": null
+  },
+  {
+    "text": "Just ",
+    "startMs": 26314,
+    "endMs": 26570,
+    "timestampMs": 26442,
+    "confidence": null
+  },
+  {
+    "text": "a ",
+    "startMs": 26628,
+    "endMs": 26663,
+    "timestampMs": 26645,
+    "confidence": null
+  },
+  {
+    "text": "little ",
+    "startMs": 26744,
+    "endMs": 26953,
+    "timestampMs": 26848,
+    "confidence": null
+  },
+  {
+    "text": "more ",
+    "startMs": 26988,
+    "endMs": 27104,
+    "timestampMs": 27046,
+    "confidence": null
+  },
+  {
+    "text": "headspace. ",
+    "startMs": 27150,
+    "endMs": 27859,
+    "timestampMs": 27504,
+    "confidence": null
+  },
+  {
+    "text": "Stickly. ",
+    "startMs": 28335,
+    "endMs": 28973,
+    "timestampMs": 28654,
+    "confidence": null
+  }
+]
