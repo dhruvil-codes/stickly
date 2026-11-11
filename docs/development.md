@@ -74,4 +74,6 @@ On a memory-constrained machine, run checks sequentially and set `CARGO_BUILD_JO
 
 ## Before a release
 
-Build from a clean checkout, run the automated checks and manual Windows checklist, confirm bundled font licenses, and configure Windows code signing. Validate installation, upgrades, uninstall behavior, storage recovery, and the target Windows and WebView2 versions. Current development checks are not a substitute for release validation.
+Build from a clean checkout, run the automated checks and manual Windows checklist, and confirm bundled font licenses. Configure Windows code signing for signed distribution; label unsigned early previews clearly. Validate installation, upgrades, uninstall behavior, storage recovery, and the target Windows and WebView2 versions. Current development checks are not a substitute for release validation.
+
+The public download links expect a release asset named `Stickly-Setup.exe`. Build with `npm run desktop:build`, copy the generated x64 NSIS installer to that name, and upload it with `SHA256SUMS.txt` to the matching version's GitHub Release. Keep the version in `package.json`, `src-tauri/Cargo.toml`, and `src-tauri/tauri.conf.json` consistent. Publish only after testing the packaged installer. The latest release's asset name must stay the same so existing download links keep working.

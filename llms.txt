@@ -9,6 +9,7 @@ Current source version: 0.1.0, early Windows release.
 ## Documentation
 
 - [README and FAQ](https://github.com/dhruvil-codes/stickly/blob/main/README.md): Product overview, source setup, build commands, controls, storage, and direct answers to common questions.
+- [Installation guide](https://github.com/dhruvil-codes/stickly/blob/main/docs/installation.md): Download, setup, updates, checksums, and note storage.
 - [Development guide](https://github.com/dhruvil-codes/stickly/blob/main/docs/development.md): Tests, native debug helpers, manual Windows checks, and release validation.
 - [Architecture](https://github.com/dhruvil-codes/stickly/blob/main/docs/architecture.md): Renderer, data model, native commands, paper geometry, storage, and test boundaries.
 - [Third-party notices](https://github.com/dhruvil-codes/stickly/blob/main/THIRD_PARTY_NOTICES.md): Bundled font credits and license terms.
@@ -27,7 +28,7 @@ Current source version: 0.1.0, early Windows release.
 - Desktop integration: Alt+N toggles visibility, pin toggles always on top, closing hides to tray, tray Quit exits.
 - Data: %APPDATA%\stickly\data.json with data.backup.json. Plain, unencrypted JSON. No account, app server, analytics client, or cloud sync.
 - Browser preview: localStorage only; native desktop integration requires Tauri.
-- Distribution: build from source. No signed production installer is currently provided.
+- Distribution: Windows x64 NSIS setup, installed per user with Start menu and desktop shortcuts. Download https://github.com/dhruvil-codes/stickly/releases/latest/download/Stickly-Setup.exe. The installer is unsigned and there is no automatic updater. Building from source remains available.
 - Project licensing: no project-wide source license selected. Dependencies and bundled fonts keep their own licenses.
 
 ## Build and check entry points

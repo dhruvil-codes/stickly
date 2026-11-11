@@ -9,9 +9,11 @@ A thousand things on your mind? Give the next one a little paper. Stickly is a W
   <a href="docs/media/stickly-launch.mp4">Watch the 30-second launch film</a> | <a href="docs/media/native-desktop-demo.mp4">Real Windows demo</a> | <a href="docs/index.html">Video index</a> | <a href="docs/media/README.md">Media kit</a>
 </p>
 
-Early Windows preview. [Build from source](#build-from-source) to try it; see [known limits](#known-limits) for release and licensing details.
+**[Download Stickly for Windows](https://github.com/dhruvil-codes/stickly/releases/latest/download/Stickly-Setup.exe)**
 
-[Build it](#build-from-source) · [See the controls](#quick-controls) · [Roadmap](docs/roadmap.md) · [Development guide](docs/development.md)
+Windows x64. A normal setup file with Start menu and desktop shortcuts. No Node.js, Rust, or terminal needed. This is an unsigned early preview; see the [release notes](https://github.com/dhruvil-codes/stickly/releases/latest).
+
+[Install it](#install-stickly) · [See the controls](#quick-controls) · [Roadmap](docs/roadmap.md) · [Development guide](docs/development.md)
 
 ## A note can be a note
 
@@ -38,9 +40,19 @@ Start with a blank page. Add a checklist when you need one. Give each note a col
 
 Writing uses the bundled Shantell Sans **Bold 700** weight. **Ctrl+B** switches the active note text or task to **ExtraBold 800**. There is no account or cloud sync.
 
+## Install Stickly
+
+1. [Download Stickly-Setup.exe](https://github.com/dhruvil-codes/stickly/releases/latest/download/Stickly-Setup.exe).
+2. Open it and follow the setup steps. It installs for your Windows account.
+3. Open **Stickly** from Start or the desktop shortcut. Press **Alt+N** to show or hide it.
+
+Setup handles Microsoft WebView2 if it is missing; that first-time runtime download needs internet. Everyday note taking works offline. Existing notes stay in `%APPDATA%\stickly` when you install a newer version.
+
+For updates, run the latest setup again. To uninstall, use **Windows Settings > Apps > Stickly**. See the [installation guide](docs/installation.md) for checksums and troubleshooting.
+
 ## Build from source
 
-Stickly is an early Windows desktop app. To try it, install Node.js 22.12 or newer, Rust stable, Microsoft C++ Build Tools with the Desktop development with C++ workload, and the WebView2 Runtime. See the official [Tauri Windows prerequisites](https://v2.tauri.app/start/prerequisites/#windows).
+To develop Stickly or build your own installer, install Node.js 22.12 or newer, Rust stable, Microsoft C++ Build Tools with the Desktop development with C++ workload, and the WebView2 Runtime. See the official [Tauri Windows prerequisites](https://v2.tauri.app/start/prerequisites/#windows).
 
 ```powershell
 git clone https://github.com/dhruvil-codes/stickly.git
@@ -89,7 +101,7 @@ To restore the backup, quit Stickly first. Copy both files somewhere safe, keep 
 ## Known limits
 
 - Windows is the only verified desktop target. macOS and Linux builds are not verified or distributed.
-- This is an early release. There is no signed production installer or automatic updater.
+- The Windows installer is an unsigned early preview. Automatic updates and code signing are not available yet.
 - Stickly uses one app window for all notes; separate note windows are not available.
 - Notes live on this PC. There is no sync, account, or Microsoft Sticky Notes import.
 - The project has not selected a license for its own source code. Third-party fonts and packages keep their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).
@@ -122,7 +134,7 @@ No. It has its own local JSON files. Import, OneNote integration, and cloud sync
 
 ### Can I install Stickly with a signed setup file?
 
-The repository does not currently provide a signed production installer. You can build an unsigned NSIS installer from source with `npm run desktop:build`.
+The [Windows setup](https://github.com/dhruvil-codes/stickly/releases/latest/download/Stickly-Setup.exe) is available, but it is not code-signed yet. Windows may warn about an unrecognized publisher. You do not need developer tools to install it.
 
 ## Fonts, artwork, and project notes
 
