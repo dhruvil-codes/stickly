@@ -15,6 +15,38 @@ pub struct Task {
     pub completed: bool,
     pub bold: bool,
     pub created_at: String,
+    #[serde(default)]
+    pub focus_date: Option<String>,
+    #[serde(default)]
+    pub reminder_at: Option<i64>,
+}
+
+pub(crate) const MAX_REMINDER_AT: i64 = 8_640_000_000_000_000;
+
+fn valid_focus_date(value: &str) -> bool {
+    let bytes = value.as_bytes();
+    if bytes.len() != 10
+        || bytes[4] != b'-'
+        || bytes[7] != b'-'
+        || !bytes
+            .iter()
+            .enumerate()
+            .all(|(i, b)| i == 4 || i == 7 || b.is_ascii_digit())
+    {
+        return false;
+    }
+    let year: u32 = value[..4].parse().unwrap();
+    let month: u32 = value[5..7].parse().unwrap();
+    let day: u32 = value[8..].parse().unwrap();
+    let leap = year.is_multiple_of(4) && (!year.is_multiple_of(100) || year.is_multiple_of(400));
+    let days = match month {
+        2 if leap => 29,
+        2 => 28,
+        4 | 6 | 9 | 11 => 30,
+        1 | 3 | 5 | 7 | 8 | 10 | 12 => 31,
+        _ => return false,
+    };
+    year > 0 && day > 0 && day <= days
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize, PartialEq)]
@@ -91,6 +123,22 @@ fn validate(data: &AppData) -> Result<(), String> {
         for task in &note.tasks {
             if task.id.is_empty() || !task_ids.insert(&task.id) {
                 return Err("Task IDs must be nonempty and unique.".into());
+            }
+            if task
+                .focus_date
+                .as_deref()
+                .is_some_and(|date| !valid_focus_date(date))
+            {
+                return Err("Task focus dates must be valid YYYY-MM-DD calendar dates.".into());
+            }
+            if task
+                .reminder_at
+                .is_some_and(|at| !(0..=MAX_REMINDER_AT).contains(&at))
+            {
+                return Err(
+                    "Task reminder times must be UTC milliseconds between 0 and 8640000000000000."
+                        .into(),
+                );
             }
         }
     }
@@ -241,7 +289,7 @@ impl Store {
     }
 }
 
-fn atomic_write(path: &Path, bytes: &[u8]) -> Result<(), String> {
+pub(crate) fn atomic_write(path: &Path, bytes: &[u8]) -> Result<(), String> {
     let pending = path.with_extension("pending");
     let mut file = fs::File::create(&pending).map_err(|e| e.to_string())?;
     file.write_all(bytes)
@@ -323,9 +371,11 @@ mod tests {
         serde_json::from_str(r#"{"version":1,"activeNoteId":"n","notes":[{"id":"n","title":"Things","color":"yellow","tasks":[{"id":"t","text":"Keep me","completed":false,"bold":true,"createdAt":"2026-11-09"}],"archivedAt":null,"createdAt":"2026-11-09"}],"alwaysOnTop":false,"windowPosition":null}"#).unwrap()
     }
     fn directory() -> PathBuf {
+        static NEXT: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
         let p = std::env::temp_dir().join(format!(
-            "stickly-test-{}-{}",
+            "stickly-test-{}-{}-{}",
             std::process::id(),
+            NEXT.fetch_add(1, std::sync::atomic::Ordering::Relaxed),
             std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
                 .unwrap()
@@ -478,5 +528,62 @@ mod tests {
         let mut data = fixture();
         data.notes[0].archived_at = Some("2026-11-09".into());
         assert!(validate(&data).is_err());
+    }
+
+    #[test]
+    fn legacy_tasks_default_to_no_schedule_and_schedules_round_trip() {
+        let dir = directory();
+        let path = dir.join("data.json");
+        let store = Store::open(path.clone());
+        let mut data = fixture();
+        assert_eq!(data.notes[0].tasks[0].focus_date, None);
+        assert_eq!(data.notes[0].tasks[0].reminder_at, None);
+        data.notes[0].tasks[0].focus_date = Some("2028-02-29".into());
+        data.notes[0].tasks[0].reminder_at = Some(MAX_REMINDER_AT);
+        store.save(data.clone()).unwrap();
+        assert_eq!(
+            Store::open(path).inner.lock().unwrap().data.as_ref(),
+            Some(&data)
+        );
+        fs::remove_dir_all(dir).unwrap();
+    }
+
+    #[test]
+    fn invalid_schedule_is_rejected_without_overwriting_notes() {
+        let dir = directory();
+        let path = dir.join("data.json");
+        let store = Store::open(path.clone());
+        store.save(fixture()).unwrap();
+        let original = fs::read(&path).unwrap();
+        for date in [
+            "2026-02-29",
+            "2026-04-31",
+            "0000-01-01",
+            "2026-00-01",
+            "2026-01-00",
+            "2026-1-01",
+            "2026-01-01T00:00:00Z",
+            "📝-01-01",
+        ] {
+            let mut data = fixture();
+            data.notes[0].tasks[0].focus_date = Some(date.into());
+            assert!(store.save(data).is_err(), "accepted {date}");
+            assert_eq!(fs::read(&path).unwrap(), original);
+        }
+        for at in [-1, MAX_REMINDER_AT + 1] {
+            let mut data = fixture();
+            data.notes[0].tasks[0].reminder_at = Some(at);
+            assert!(store.save(data).is_err());
+            assert_eq!(fs::read(&path).unwrap(), original);
+        }
+        let mut invalid: serde_json::Value = serde_json::from_slice(&original).unwrap();
+        invalid["notes"][0]["tasks"][0]["reminderAt"] = (-1).into();
+        let bytes = serde_json::to_vec(&invalid).unwrap();
+        fs::write(&path, &bytes).unwrap();
+        let loaded = Store::open(path.clone());
+        assert!(loaded.inner.lock().unwrap().error.is_some());
+        assert!(loaded.save(fixture()).is_err());
+        assert_eq!(fs::read(&path).unwrap(), bytes);
+        fs::remove_dir_all(dir).unwrap();
     }
 }

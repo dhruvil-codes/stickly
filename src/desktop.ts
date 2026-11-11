@@ -26,6 +26,8 @@ export async function resizeBy(width: number, height: number) {
 }
 export async function onNewNote(callback: () => void) { return native ? listen('stickly:new-note', callback) : () => {}; }
 export async function onStorageError(callback: (message: string) => void) { return native ? listen<string>('stickly:storage-error', event => callback(event.payload)) : () => {}; }
+export async function onReminderDue(callback: () => void) { return native ? listen('stickly:reminder-due', callback) : () => {}; }
+export async function onNotificationError(callback: (message: string) => void) { return native ? listen<string>('stickly:notification-error', event => callback(event.payload)) : () => {}; }
 export async function onQuitRequested(callback: () => Promise<void>) { return native ? listen('stickly:quit-requested', () => { void callback(); }) : () => {}; }
 export async function quitApp() { if (native) await invoke('quit_app'); }
 export async function beginCarry(offsetX: number, offsetY: number) { if (native) await invoke('begin_carry', { offsetX, offsetY }); }

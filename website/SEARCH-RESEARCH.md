@@ -20,7 +20,7 @@ the most searched.
 | sticky notes disappeared, restore archived sticky notes | Find a hidden window or restore an archived note; distinguish deletion | Guides hub and Privacy |
 | sticky notes keyboard shortcut | Show/hide, new note, and bold controls | Guides hub and Features |
 | sticky notes alternative for Windows | Understand what Stickly offers and its current limits | Homepage, Features, and Guides |
-| sticky notes reminders, sync sticky notes across devices | Whether the app actually supports these | Explicit answers in the hub and FAQ; these are not shipped Stickly features |
+| sticky notes reminders, sync sticky notes across devices | Whether the app actually supports these | Local reminders and Today are available in 0.2.0; cloud sync is unavailable |
 
 ## Evidence and editorial choices
 
@@ -45,7 +45,8 @@ provides a verified alternative for a window without its own pin.
 
 Microsoft also [documents local use without sign-in](https://support.microsoft.com/en-us/windows/apps/stickynotes/see-your-sticky-notes-on-other-devices-and-the-web).
 Do not imply Stickly is the only app that can do this, or that importing Microsoft
-notes, reminders, cloud sync, and multiple windows are available in Stickly.
+notes, cloud sync, and multiple windows are available in Stickly. Version 0.2.0
+now provides local reminders and Today focus, with explicit tray/quit behavior.
 
 ## Implementation
 

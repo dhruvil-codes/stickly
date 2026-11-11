@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useRef, useState, type CSSProperties, type KeyboardEvent, type ReactNode, type RefObject } from 'react';
-import { Archive, ArrowLeft, ArrowUpRight, Check, CheckCircle2, ChevronLeft, ChevronRight, History, ListChecks, LoaderCircle, MoreHorizontal, Pin, Palette, Plus, RotateCcw, SquarePen, StickyNote, Trash2, Type, X } from 'lucide-react';
+import { Archive, ArrowLeft, ArrowUpRight, Bell, Check, CheckCircle2, ChevronLeft, ChevronRight, GripVertical, History, ListChecks, LoaderCircle, MoreHorizontal, Pin, Palette, Plus, RotateCcw, SquarePen, StickyNote, Sun, Trash2, Type, X } from 'lucide-react';
 import { gsap } from 'gsap';
-import { colors, fontSizes, initialData, newNote, newTask, reduceData, type Action, type AppData, type Color, type FontSize, type Task } from './model';
-import { hideWindow, loadData, moveWindowBy, native, onNewNote, onQuitRequested, onStorageError, quitApp, resizeBy, saveData, setPinned } from './desktop';
+import { colors, fontSizes, initialData, localDay, newNote, newTask, reduceData, todayTasks, type Action, type AppData, type Color, type FontSize, type Note, type Task } from './model';
+import { hideWindow, loadData, moveWindowBy, native, onNewNote, onNotificationError, onQuitRequested, onReminderDue, onStorageError, quitApp, resizeBy, saveData, setPinned } from './desktop';
 import { PeelPaper } from './PeelPaper';
 import { useWindowGestures } from './useWindowGestures';
+import { useTaskReorder } from './useTaskReorder';
+import { ProductivityPanel, TaskOptions, reminderLabel, type ProductivityView } from './Productivity';
 import './App.css';
 
 function IconButton({ label, children, onClick, pressed, expanded, className = '', disabled = false }: { label: string; children: ReactNode; onClick: () => void; pressed?: boolean; expanded?: boolean; className?: string; disabled?: boolean }) {
@@ -28,6 +30,9 @@ export default function App() {
   const [hidden, setHidden] = useState(false);
   const [pinBusy, setPinBusy] = useState(false);
   const [focusTask, setFocusTask] = useState<string | null>(null);
+  const [utilityView, setUtilityView] = useState<ProductivityView | null>(null);
+  const [taskMenu, setTaskMenu] = useState<{ noteId: string; taskId: string } | null>(null);
+  const [now, setNow] = useState(Date.now);
   const saveQueue = useRef<Promise<void>>(Promise.resolve());
   const pendingSave = useRef<AppData | null>(null);
   const writing = useRef(false);
@@ -39,12 +44,39 @@ export default function App() {
   const drawer = useRef<HTMLElement>(null);
   const titleRef = useRef<HTMLInputElement>(null);
   const bodyRef = useRef<HTMLTextAreaElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const taskOptionsRef = useRef<HTMLDivElement>(null);
   const gestures = useWindowGestures(setError);
   const moveGesture = gestures.bind('moving');
+  const reorder = useTaskReorder(listRef, (id, toIndex) => {
+    const noteId = stateRef.current?.activeNoteId;
+    if (noteId) dispatch({ type: 'move-task', noteId, id, toIndex });
+  });
+  useEffect(() => {
+    const refresh = () => setNow(Date.now());
+    const timer = window.setInterval(refresh, 1000);
+    window.addEventListener('focus', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    let disposed = false;
+    let unlisten: (() => void) | undefined;
+    onReminderDue(refresh).then(fn => { if (disposed) fn(); else unlisten = fn; }).catch(e => setError(String(e)));
+    return () => { disposed = true; clearInterval(timer); window.removeEventListener('focus', refresh); document.removeEventListener('visibilitychange', refresh); unlisten?.(); };
+  }, []);
+  useEffect(() => {
+    if (!taskMenu) return;
+    const close = (e: Event) => {
+      const target = e.target as Element;
+      if (!taskOptionsRef.current?.contains(target) && !target.closest('.task-options-toggle')) setTaskMenu(null);
+    };
+    document.addEventListener('pointerdown', close, true);
+    document.addEventListener('focusin', close, true);
+    taskOptionsRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
+    return () => { document.removeEventListener('pointerdown', close, true); document.removeEventListener('focusin', close, true); };
+  }, [taskMenu]);
   function toggleToolbar() {
     const expanded = !toolbarOpen;
     setToolbarOpen(expanded);
-    setPaletteOpen(false); setFontOpen(false); setDeleteConfirm(false);
+    setPaletteOpen(false); setFontOpen(false); setDeleteConfirm(false); setTaskMenu(null);
     try { localStorage.setItem('stickly:toolbar-expanded', String(expanded)); } catch { /* The controls still work when preferences cannot be stored. */ }
   }
   useAutoHeight(bodyRef, data?.notes.find(n => n.id === data.activeNoteId)?.body ?? '', `${data?.activeNoteId}:${data?.notes.find(n => n.id === data.activeNoteId)?.bodyBold}:${data?.notes.find(n => n.id === data.activeNoteId)?.tasks.length}:${data?.notes.find(n => n.id === data.activeNoteId)?.fontSize}`);
@@ -91,6 +123,7 @@ export default function App() {
   const createNote = useCallback(() => {
     dispatch({ type: 'new-note', note: newNote(stateRef.current?.notes.find(n => n.id === stateRef.current?.activeNoteId)?.color) });
     setHistoryOpen(false); setPaletteOpen(false); setFontOpen(false); setDeleteConfirm(false);
+    setUtilityView(null); setTaskMenu(null);
     requestAnimationFrame(() => bodyRef.current?.focus());
   }, [dispatch]);
 
@@ -106,6 +139,7 @@ export default function App() {
     const cleanups: (() => void)[] = [];
     const attach = (fn: () => void) => { if (disposed) fn(); else cleanups.push(fn); };
     onStorageError(message => { setSaveFailed(true); setError(message); }).then(attach).catch(e => setError(String(e)));
+    onNotificationError(setError).then(attach).catch(e => setError(String(e)));
     onQuitRequested(async () => {
       await saveQueue.current;
       // A failed write keeps the app open so edits can still be recovered.
@@ -140,7 +174,7 @@ export default function App() {
     return () => { tween.kill(); };
   }, [historyOpen]);
 
-  useEffect(() => { setDeleteConfirm(false); }, [data?.activeNoteId]);
+  useEffect(() => { setDeleteConfirm(false); setTaskMenu(null); }, [data?.activeNoteId]);
   useEffect(() => { if (deleteConfirm) document.querySelector<HTMLButtonElement>('.delete-popover button')?.focus(); }, [deleteConfirm]);
 
   const note = data?.notes.find(n => n.id === data.activeNoteId);
@@ -151,10 +185,28 @@ export default function App() {
   const archivedNotes = data?.notes.filter(n => n.archivedAt) ?? [];
   const completedNotes = data?.notes.filter(n => !n.archivedAt && n.tasks.some(t => t.completed)) ?? [];
   const historyCount = archivedNotes.length + completedNotes.reduce((sum, n) => sum + n.tasks.filter(t => t.completed).length, 0);
+  const day = localDay(new Date(now));
+  const dueCount = data?.notes.filter(n => !n.archivedAt).reduce((sum, n) => sum + n.tasks.filter(t => !t.completed && t.reminderAt != null && t.reminderAt <= now).length, 0) ?? 0;
+  const menuNote = data?.notes.find(n => n.id === taskMenu?.noteId);
+  const menuTask = menuNote?.tasks.find(t => t.id === taskMenu?.taskId);
+
+  function closeTaskMenu() {
+    const id = taskMenu?.taskId;
+    setTaskMenu(null);
+    if (id) requestAnimationFrame(() => Array.from(document.querySelectorAll<HTMLButtonElement>(`[data-options-for="${CSS.escape(id)}"]`)).find(button => !button.closest('[inert]'))?.focus());
+  }
+  function openUtility(view: ProductivityView) {
+    setUtilityView(utilityView === view ? null : view);
+    setHistoryOpen(false); setPaletteOpen(false); setFontOpen(false); setTaskMenu(null); setDeleteConfirm(false);
+  }
 
   function addTask(afterId?: string) {
     if (!note) return;
     const task = newTask();
+    if (utilityView === 'today' && data) {
+      if (todayTasks(data, day).filter(item => !item.task.completed).length >= 3) return;
+      task.focusDate = day;
+    }
     dispatch({ type: 'add-task', noteId: note.id, task, afterId });
     setFocusTask(task.id);
   }
@@ -181,7 +233,9 @@ export default function App() {
   }
   function keyboard(e: KeyboardEvent) {
     if (e.key === 'Escape') {
-      if (deleteConfirm) setDeleteConfirm(false);
+      if (taskMenu) closeTaskMenu();
+      else if (utilityView) setUtilityView(null);
+      else if (deleteConfirm) setDeleteConfirm(false);
       else if (clearConfirm) setClearConfirm(false);
       else if (fontOpen) { setFontOpen(false); fontButton.current?.querySelector('button')?.focus(); }
       else if (paletteOpen) { setPaletteOpen(false); paletteButton.current?.querySelector('button')?.focus(); }
@@ -195,6 +249,16 @@ export default function App() {
   if (hidden) return <main className="browser-hidden"><StickyNote /><p>Your little space is tucked away.</p><button onClick={() => setHidden(false)}>Show Stickly</button><small>In the desktop app, press Alt + N to bring it back.</small></main>;
 
   const style = { '--paper': color.paper, '--ink': color.ink, '--accent': color.accent, '--back': color.back, '--writing-size': `${fontSizes[note.fontSize].body}px`, '--title-size': `${fontSizes[note.fontSize].title}px` } as CSSProperties;
+  function renderTask(owner: Note, task: Task, index: number, draggable = false) {
+    const dragging = draggable && reorder.drag?.id === task.id;
+    const target = draggable && reorder.drag && reorder.drag.to === index && reorder.drag.id !== task.id;
+    return <TaskRow key={task.id} task={task} index={index} fontSize={owner.fontSize} now={now} focus={focusTask === task.id} onFocused={() => setFocusTask(null)}
+      update={patch => dispatch({ type: 'edit-task', noteId: owner.id, id: task.id, day, patch })}
+      add={() => { const next = newTask(); if (utilityView === 'today') { if (todayTasks(data!, day).filter(item => !item.task.completed).length >= 3) return; next.focusDate = day; } dispatch({ type: 'add-task', noteId: owner.id, afterId: task.id, task: next }); setFocusTask(next.id); }}
+      remove={() => { dispatch({ type: 'delete-task', noteId: owner.id, id: task.id }); const next = owner.tasks[index + 1] ?? owner.tasks[index - 1]; if (next) setFocusTask(next.id); }}
+      options={() => { setTaskMenu(taskMenu?.taskId === task.id ? null : { noteId: owner.id, taskId: task.id }); setPaletteOpen(false); setFontOpen(false); }} optionsOpen={taskMenu?.taskId === task.id}
+      dragHandle={draggable ? reorder.bind(task.id, index) : undefined} dragging={!!dragging} dropEdge={target ? (reorder.drag!.to > reorder.drag!.from ? 'after' : 'before') : undefined} deltaY={dragging ? reorder.drag!.delta : 0} />;
+  }
   return <main className={`stickly ${note.color === 'charcoal' ? 'dark-paper' : ''}`} data-window-gesture={gestures.mode} style={style} onKeyDown={keyboard} {...moveGesture} onPointerDown={event => {
     if (event.currentTarget.querySelector('.paper-shell')?.getAttribute('data-peel-state') !== 'flat') return;
     const target = event.target as Element;
@@ -237,7 +301,7 @@ export default function App() {
                 paletteRef.current?.querySelectorAll<HTMLButtonElement>('button')[next].focus();
               }}><div className="palette-heading"><span className="palette-caption">Paper color</span><span>{color.name}</span></div><div className="swatches">{(Object.entries(colors) as [Color, typeof color][]).map(([key, c]) => <button key={key} role="radio" aria-label={c.name} aria-checked={note.color === key} tabIndex={note.color === key ? 0 : -1} title={c.name} style={{ background: c.paper, color: c.ink }} onClick={() => dispatch({ type: 'edit-note', id: note.id, patch: { color: key } })}>{note.color === key && <Check size={17} />}</button>)}</div></div>}
             </div>
-            <IconButton label="History and archive" expanded={historyOpen} onClick={() => { setHistoryOpen(!historyOpen); setPaletteOpen(false); setFontOpen(false); setClearConfirm(false); }}><History /></IconButton>
+            <IconButton label="History and archive" expanded={historyOpen} onClick={() => { setHistoryOpen(!historyOpen); setPaletteOpen(false); setFontOpen(false); setClearConfirm(false); setUtilityView(null); setTaskMenu(null); }}><History /></IconButton>
             <IconButton label="Delete note" expanded={deleteConfirm} onClick={() => {
               setFontOpen(false); setPaletteOpen(false);
               if (note.title.trim() || note.body.trim() || note.tasks.some(task => task.text.trim())) setDeleteConfirm(!deleteConfirm);
@@ -253,22 +317,24 @@ export default function App() {
           </div>}
         </header>
 
-        <section className="note-content" aria-label="Current note" inert={historyOpen}>
+        <section className="note-content" aria-label="Current note" inert={historyOpen || !!utilityView || !!taskMenu}>
           <div className="note-heading"><input ref={titleRef} className="note-title" aria-label="Note title" placeholder="Untitled" value={note.title} maxLength={100} onChange={e => dispatch({ type: 'edit-note', id: note.id, patch: { title: e.target.value } })} onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); (bodyRef.current ?? document.querySelector<HTMLTextAreaElement>('.task-list textarea'))?.focus(); } }} /></div>
           <div className="editor-scroll">
             {(!note.tasks.length || note.body.trim().length > 0) && <textarea key={note.id} ref={bodyRef} className={`note-body ${note.bodyBold ? 'bold' : ''} ${note.tasks.length ? 'with-checklist' : ''}`} aria-label="Note text" placeholder="What’s on your mind?" value={note.body} maxLength={50000} rows={1} wrap="soft" onChange={e => dispatch({ type: 'edit-note', id: note.id, patch: { body: e.target.value } })} onKeyDown={e => {
               if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); dispatch({ type: 'edit-note', id: note.id, patch: { bodyBold: !note.bodyBold } }); }
             }} />}
-            <ul className="task-list" aria-label="Checklist">{note.tasks.map((task, index) => <TaskRow key={task.id} task={task} index={index} fontSize={note.fontSize} focus={focusTask === task.id} onFocused={() => setFocusTask(null)} update={patch => dispatch({ type: 'edit-task', noteId: note.id, id: task.id, patch })} add={() => addTask(task.id)} remove={() => { dispatch({ type: 'delete-task', noteId: note.id, id: task.id }); const next = note.tasks[index + 1] ?? note.tasks[index - 1]; if (next) setFocusTask(next.id); }} />)}</ul>
+            <ul ref={listRef} className="task-list" aria-label="Checklist">{note.tasks.map((task, index) => renderTask(note, task, index, true))}</ul>
             {note.tasks.length > 0 && <button className="add-task" onClick={() => addTask()}><Plus size={16} /><span>Add item</span></button>}
           </div>
         </section>
 
         <footer className="note-footer" inert={historyOpen}>
           <div className="note-navigation"><IconButton label="Previous note" disabled={activeIndex <= 0} onClick={() => dispatch({ type: 'select-note', id: activeNotes[activeIndex - 1].id })}><ChevronLeft /></IconButton><span>{activeIndex + 1} / {activeNotes.length}</span><IconButton label="Next note" disabled={activeIndex >= activeNotes.length - 1} onClick={() => dispatch({ type: 'select-note', id: activeNotes[activeIndex + 1].id })}><ChevronRight /></IconButton></div>
-          <span className="save-status" role="status" title={saveFailed ? 'Changes not saved' : saving ? 'Saving' : 'Saved on this device'}>{saveFailed ? <span className="error-dot" /> : saving ? <LoaderCircle className="spin" size={15} /> : <CheckCircle2 size={16} />}<span className="sr-only">{saveFailed ? 'Not saved' : saving ? 'Saving…' : 'All tucked in'}</span>{note.tasks.length > 0 && <span className="completion-count" aria-label={`${completed} of ${note.tasks.length} completed`}>{completed}/{note.tasks.length}</span>}</span>
-          <button className="new-note" onClick={createNote}><SquarePen size={16} /> New note</button>
+          <div className="footer-tools"><span className="save-status" role="status" title={saveFailed ? 'Changes not saved' : saving ? 'Saving' : 'Saved on this device'}>{saveFailed ? <span className="error-dot" /> : saving ? <LoaderCircle className="spin" size={15} /> : <CheckCircle2 size={16} />}<span className="sr-only">{saveFailed ? 'Not saved' : saving ? 'Saving…' : 'All tucked in'}</span>{note.tasks.length > 0 && <span className="completion-count" aria-label={`${completed} of ${note.tasks.length} completed`}>{completed}/{note.tasks.length}</span>}</span><IconButton label="Today's focus" pressed={utilityView === 'today'} onClick={() => openUtility('today')}><Sun /></IconButton><IconButton label="Reminders" expanded={utilityView === 'reminders'} className={dueCount ? 'has-due-reminders' : ''} onClick={() => openUtility('reminders')}><Bell /></IconButton></div>
+          <button className="new-note" aria-label="New note" onClick={createNote}><SquarePen size={16} /><span className="new-note-label-long">New note</span><span className="new-note-label-short" aria-hidden="true">New</span></button>
         </footer>
+        {utilityView && <ProductivityPanel view={utilityView} data={data} now={now} close={() => setUtilityView(null)} dispatch={dispatch} jump={id => { dispatch({ type: 'select-note', id }); setUtilityView(null); }} options={(noteId, taskId) => setTaskMenu({ noteId, taskId })} renderTask={(owner, task, index) => renderTask(owner, task, index)} add={() => addTask()} />}
+        {menuNote && menuTask && <div ref={taskOptionsRef}><TaskOptions key={menuTask.id} note={menuNote} task={menuTask} data={data} now={now} dispatch={dispatch} close={closeTaskMenu} /></div>}
 
         {historyOpen && <aside ref={drawer} data-no-peel className="history-drawer" aria-label="History drawer" onKeyDown={e => {
           if (e.key !== 'Tab') return;
@@ -301,19 +367,20 @@ export default function App() {
   </main>;
 }
 
-function TaskRow({ task, index, fontSize, focus, onFocused, update, add, remove }: { task: Task; index: number; fontSize: FontSize; focus: boolean; onFocused: () => void; update: (patch: Partial<Task>) => void; add: () => void; remove: () => void }) {
+function TaskRow({ task, index, fontSize, now, focus, onFocused, update, add, remove, options, optionsOpen, dragHandle, dragging, dropEdge, deltaY }: { task: Task; index: number; fontSize: FontSize; now: number; focus: boolean; onFocused: () => void; update: (patch: Partial<Task>) => void; add: () => void; remove: () => void; options: () => void; optionsOpen: boolean; dragHandle?: ReturnType<ReturnType<typeof useTaskReorder>['bind']>; dragging: boolean; dropEdge?: string; deltaY: number }) {
   const text = useRef<HTMLTextAreaElement>(null);
   useEffect(() => { if (focus) { text.current?.focus(); text.current?.scrollIntoView({ block: 'nearest' }); onFocused(); } }, [focus, onFocused]);
   useAutoHeight(text, task.text, `${task.bold}:${fontSize}`);
-  return <li className={`task-row ${task.completed ? 'completed' : ''} ${task.bold ? 'bold' : ''}`}>
+  return <li className={`task-row ${task.completed ? 'completed' : ''} ${task.bold ? 'bold' : ''} ${dragging ? 'is-dragging' : ''}`} data-drop-edge={dropEdge} style={dragging ? { transform: `translate3d(0,${deltaY}px,0)` } : undefined}>
+    {dragHandle && <button type="button" className="reorder-handle" data-reorder-id={task.id} aria-label={`Reorder task ${index + 1}`} title="Drag to reorder · Alt + arrow keys" {...dragHandle}><GripVertical size={12} /></button>}
     <button className="hand-checkbox" role="checkbox" aria-checked={task.completed} aria-label={`Complete task ${index + 1}: ${task.text || 'empty task'}`} onClick={() => update({ completed: !task.completed })}><svg viewBox="0 0 26 26" aria-hidden="true"><rect className="checkbox-outline" x="4" y="4" width="18" height="18" rx="5" /><path className="checkbox-tick" d="m7.5 13 3.7 3.8L19 9" /></svg></button>
     <div className="task-text"><textarea ref={text} aria-label={`Task ${index + 1}`} rows={1} wrap="soft" value={task.text} placeholder="To do…" spellCheck={false} maxLength={2000} onChange={e => update({ text: e.target.value })} onKeyDown={e => {
       if (e.nativeEvent.isComposing) return;
       if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); add(); }
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); update({ bold: !task.bold }); }
       if (e.key === 'Backspace' && !task.text) { e.preventDefault(); remove(); }
-    }} /></div>
-    <button className="delete-task" aria-label={`Delete task ${index + 1}`} title="Delete task" onClick={remove}><X size={15} /></button>
+    }} />{(task.focusDate && task.focusDate <= localDay(new Date(now)) || task.reminderAt != null && !task.completed) && <div className="task-metadata">{task.focusDate && task.focusDate <= localDay(new Date(now)) && <Sun size={11} aria-label="In Today" />}{task.reminderAt != null && !task.completed && <span className={task.reminderAt <= now ? 'reminder-overdue' : ''}><Bell size={10} />{task.reminderAt <= now ? 'Due · ' : ''}{reminderLabel(task.reminderAt, now)}</span>}</div>}</div>
+    <button type="button" className="task-options-toggle" data-options-for={task.id} aria-label={`Task ${index + 1} options`} aria-expanded={optionsOpen} title="Task options" onClick={options}><MoreHorizontal size={15} /></button>
   </li>;
 }
 

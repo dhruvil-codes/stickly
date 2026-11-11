@@ -1,7 +1,7 @@
 {
   "name": "stickly",
   "private": true,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Offline Windows sticky notes with optional checklists, a tactile corner peel, and local storage. Built with Tauri, Rust, and React.",
   "author": "Dhruvil Mistry",
   "homepage": "https://github.com/dhruvil-codes/stickly#readme",

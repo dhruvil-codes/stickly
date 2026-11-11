@@ -1,0 +1,58 @@
+.footer-tools { display: flex; align-items: center; gap: 2px; min-width: 0; }
+.new-note-label-short { display: none; }
+.footer-tools > .icon-button { width: 20px; height: 22px; }
+.footer-tools > .icon-button > svg { width: 13px; height: 13px; }
+.footer-tools .icon-button::after { top: auto; bottom: calc(100% + 6px); }
+.has-due-reminders::before { content: ''; position: absolute; top: 1px; right: 1px; width: 5px; height: 5px; border-radius: 50%; background: var(--ink); }
+.task-row { position: relative; }
+.reorder-handle { width: 12px; height: 26px; flex: 0 0 12px; margin-left: -9px; opacity: .18; display: grid; place-items: center; cursor: grab !important; touch-action: none; }
+.task-row:hover .reorder-handle, .task-row:focus-within .reorder-handle { opacity: .65; }
+.reorder-handle:active { cursor: grabbing !important; }
+.task-row.is-dragging { z-index: 4; background: var(--paper); box-shadow: 0 4px 12px #0003; border-radius: 5px; }
+.task-row[data-drop-edge]::after { content: ''; position: absolute; left: 0; right: 0; height: 2px; background: var(--ink); opacity: .45; border-radius: 2px; }
+.task-row[data-drop-edge='before']::after { top: -2px; }
+.task-row[data-drop-edge='after']::after { bottom: -2px; }
+.task-options-toggle { display: grid; place-items: center; flex: 0 0 20px; width: 20px; height: 26px; border-radius: 6px; opacity: .18; }
+.task-row:hover .task-options-toggle, .task-row:focus-within .task-options-toggle, .task-options-toggle[aria-expanded='true'] { opacity: .7; }
+.task-options-toggle:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.task-metadata { display: flex; gap: 5px; align-items: center; font-size: 12px; line-height: 1.3; opacity: .65; padding: 1px 0 3px; }
+.task-metadata > span { display: inline-flex; align-items: center; gap: 4px; flex-wrap: wrap; }
+.task-metadata .reminder-overdue { text-decoration: underline; text-underline-offset: 2px; }
+.task-options-panel { position: absolute; z-index: 18; bottom: 32px; left: 10px; right: 10px; max-height: calc(100% - 76px); overflow-y: auto; scrollbar-width: none; padding: 10px 12px; border-radius: 10px; color: var(--ink); background: color-mix(in srgb, var(--paper) 55%, white); box-shadow: 0 7px 24px #0003, inset 0 0 0 1px #0000000d; }
+.dark-paper .task-options-panel { background: #303030; }
+.task-options-panel::-webkit-scrollbar, .productivity-scroll::-webkit-scrollbar { display: none; }
+.productivity-heading { display: flex; align-items: center; gap: 5px; min-height: 28px; }
+.productivity-heading h2 { font-size: 18px; line-height: 1.2; margin: 0; font-weight: inherit; flex: 1; }
+.productivity-heading > span { font-size: 13px; opacity: .65; }
+.task-option-list > button { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 30px; border-radius: 5px; padding: 3px 4px; text-align: left; font-size: 14px; }
+.task-option-list button:hover:not(:disabled), .reminder-quick button:hover, .task-move-options button:hover:not(:disabled) { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.task-option-list button:disabled { opacity: .35; }
+.task-option-list > button > span { margin-left: auto; opacity: .65; font-size: 12px; }
+.task-move-options { display: flex; border-top: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); padding-top: 4px; margin-top: 3px; }
+.task-move-options button { display: flex; align-items: center; gap: 4px; flex: 1; padding: 5px 3px; font-size: 13px; border-radius: 5px; }
+.task-delete-option { opacity: .75; }
+.reminder-label { display: block; font-size: 13px; margin: 8px 0 5px; }
+.reminder-time { width: 100%; max-width: 100%; border: 1px solid color-mix(in srgb, var(--ink) 25%, transparent); border-radius: 6px; padding: 6px; font-size: 14px; background: color-mix(in srgb, var(--paper) 65%, transparent); color: var(--ink); }
+.dark-paper .reminder-time { color-scheme: dark; }
+.reminder-quick, .reminder-form-actions { display: flex; gap: 5px; margin-top: 7px; }
+.reminder-quick button, .reminder-form-actions button { font-size: 13px; padding: 6px 8px; border-radius: 5px; }
+.reminder-quick button { border: 1px solid color-mix(in srgb, var(--ink) 15%, transparent); }
+.reminder-form-actions { justify-content: flex-end; }
+.filled-action { background: var(--ink); color: var(--paper); }
+.productivity-hint { font-size: 13px; line-height: 1.4; opacity: .65; margin: 5px 0 10px; }
+.reminder-error { font-size: 13px; line-height: 1.3; margin: 6px 0; }
+.productivity-panel { position: absolute; inset: 39px 0 29px; display: flex; flex-direction: column; padding: 6px 14px 0; z-index: 3; background: var(--paper); min-width: 0; }
+.productivity-scroll { flex: 1; min-height: 0; overflow: auto; scrollbar-width: none; padding: 0 1px 12px; }
+.productivity-empty { font-size: 15px; line-height: 1.5; opacity: .65; margin: 18px 0; }
+.focus-entry { margin-bottom: 9px; }
+.focus-entry > ul { list-style: none; padding: 0; margin: 0; }
+.task-origin { display: block; font-size: 12px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; opacity: .6; padding: 0; line-height: 1.4; text-align: left; }
+.task-origin:hover { text-decoration: underline; }
+.focus-add { font-size: 14px; opacity: .7; padding: 5px 0; }
+.reminder-card { padding: 9px 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent); }
+.reminder-card p { margin: 2px 0 5px; font-size: 16px; line-height: 1.35; overflow-wrap: anywhere; }
+.reminder-date { display: inline-flex; align-items: center; gap: 4px; text-align: left; font-size: 12px; opacity: .65; padding: 0; }
+.reminder-card.is-due .reminder-date { opacity: 1; }
+.reminder-card-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 7px; }
+.reminder-card-actions button { display: inline-flex; align-items: center; gap: 2px; font-size: 12px; border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); padding: 4px 6px; border-radius: 6px; }
+@media (max-width: 290px) { .footer-tools .save-status { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); } .footer-tools { gap: 0; } .footer-tools > .icon-button { width: 18px; } .productivity-panel { padding-left: 12px; padding-right: 12px; } .new-note-label-long { display: none; } .new-note-label-short { display: inline; } }

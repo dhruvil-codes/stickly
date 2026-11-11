@@ -72,6 +72,7 @@ test('optional checklist CRUD, Enter, bold and seven paper colors', async ({ pag
     await expect(page.getByRole('radio', { name, exact: true })).toBeChecked();
   }
   await page.keyboard.press('Escape'); await task.hover();
+  await page.getByRole('button', { name: 'Task 1 options', exact: true }).click();
   await page.getByRole('button', { name: 'Delete task 1', exact: true }).click();
   await expect(page.getByRole('checkbox')).toHaveCount(0);
   await expect(page.getByLabel('Note text')).toHaveValue('Keep the paragraph alongside the checklist.');

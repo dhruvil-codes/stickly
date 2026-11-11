@@ -1,6 +1,8 @@
 mod carry;
 #[cfg(windows)]
 mod carry_core;
+mod reminders;
+mod reminders_core;
 mod storage;
 
 use carry::CarryManager;
@@ -142,6 +144,7 @@ fn toggle(app: &tauri::AppHandle) {
 pub fn run() {
     tauri::Builder::default()
         .manage(CarryManager::default())
+        .plugin(tauri_plugin_notification::init())
         .plugin(tauri_plugin_single_instance::init(|app, _, _| show(app)))
         .plugin(
             tauri_plugin_global_shortcut::Builder::new()
@@ -161,6 +164,7 @@ pub fn run() {
                 (inner.position, inner.pinned)
             };
             app.manage(store);
+            reminders::start(app.handle().clone(), data_dir.join("reminders.json"));
             let handle = app.handle().clone();
             app.manage(PositionWriter::new(move |position| {
                 let result = handle.state::<Store>().position(position);

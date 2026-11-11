@@ -10,10 +10,18 @@ export const colors = {
 export type Color = keyof typeof colors;
 export const fontSizes = { s: { name: 'Small text', body: 16, title: 20 }, m: { name: 'Medium text', body: 19, title: 23 }, l: { name: 'Large text', body: 23, title: 27 } } as const;
 export type FontSize = keyof typeof fontSizes;
-export interface Task { id: string; text: string; completed: boolean; bold: boolean; createdAt: string }
+export interface Task { id: string; text: string; completed: boolean; bold: boolean; createdAt: string; focusDate?: string | null; reminderAt?: number | null }
 export interface Note { id: string; title: string; body: string; bodyBold: boolean; fontSize: FontSize; color: Color; tasks: Task[]; archivedAt: string | null; createdAt: string }
 export interface AppData { version: 1; activeNoteId: string; notes: Note[]; alwaysOnTop: boolean; windowPosition: { x: number; y: number } | null }
-export const newTask = (text = ''): Task => ({ id: crypto.randomUUID(), text, completed: false, bold: false, createdAt: new Date().toISOString() });
+export const newTask = (text = ''): Task => ({ id: crypto.randomUUID(), text, completed: false, bold: false, createdAt: new Date().toISOString(), focusDate: null, reminderAt: null });
+export function localDay(date = new Date()): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+export function todayTasks(data: AppData, day = localDay()) {
+  return data.notes.filter(n => !n.archivedAt).flatMap(note => note.tasks
+    .filter(task => task.focusDate && (task.focusDate === day || (!task.completed && task.focusDate < day)))
+    .map(task => ({ note, task })));
+}
 export const newNote = (color: Color = 'yellow'): Note => ({ id: crypto.randomUUID(), title: '', body: '', bodyBold: false, fontSize: 'm', color, tasks: [], archivedAt: null, createdAt: new Date().toISOString() });
 export function initialData(): AppData {
   const note = newNote();
@@ -22,8 +30,10 @@ export function initialData(): AppData {
 export type Action =
   | { type: 'edit-note'; id: string; patch: Partial<Pick<Note, 'title' | 'color' | 'body' | 'bodyBold' | 'fontSize'>> }
   | { type: 'add-task'; noteId: string; task: Task; afterId?: string }
-  | { type: 'edit-task'; noteId: string; id: string; patch: Partial<Pick<Task, 'text' | 'completed' | 'bold'>> }
+  | { type: 'edit-task'; noteId: string; id: string; day?: string; patch: Partial<Pick<Task, 'text' | 'completed' | 'bold' | 'reminderAt'>> }
   | { type: 'delete-task'; noteId: string; id: string }
+  | { type: 'move-task'; noteId: string; id: string; toIndex: number }
+  | { type: 'focus-task'; noteId: string; id: string; day: string; selected: boolean }
   | { type: 'delete-note'; id: string; replacement: Note }
   | { type: 'new-note'; note: Note }
   | { type: 'select-note'; id: string }
@@ -42,7 +52,34 @@ export function reduceData(state: AppData, action: Action): AppData {
       tasks.splice(index, 0, action.task);
       return { ...n, tasks };
     }) };
-    case 'edit-task': return { ...state, notes: state.notes.map(n => n.id === action.noteId ? { ...n, tasks: n.tasks.map(t => t.id === action.id ? { ...t, ...action.patch } : t) } : n) };
+    case 'edit-task': {
+      const day = action.day ?? localDay();
+      const focusFull = todayTasks(state, day).filter(item => !item.task.completed).length >= 3;
+      return { ...state, notes: state.notes.map(n => n.id === action.noteId ? { ...n, tasks: n.tasks.map(t => {
+        if (t.id !== action.id) return t;
+        const next = { ...t, ...action.patch };
+        if (action.patch.completed === true) {
+          next.reminderAt = null;
+          if (t.focusDate && t.focusDate <= day) next.focusDate = day;
+        }
+        if (action.patch.completed === false && t.completed && t.focusDate && t.focusDate <= day && focusFull) next.focusDate = null;
+        return next;
+      }) } : n) };
+    }
+    case 'move-task': return { ...state, notes: state.notes.map(n => {
+      if (n.id !== action.noteId || !Number.isInteger(action.toIndex) || action.toIndex < 0 || action.toIndex >= n.tasks.length) return n;
+      const from = n.tasks.findIndex(t => t.id === action.id);
+      if (from < 0 || from === action.toIndex) return n;
+      const tasks = [...n.tasks];
+      tasks.splice(action.toIndex, 0, tasks.splice(from, 1)[0]);
+      return { ...n, tasks };
+    }) };
+    case 'focus-task': {
+      const active = todayTasks(state, action.day).filter(({ task }) => !task.completed);
+      const alreadySelected = active.some(({ task }) => task.id === action.id);
+      if (action.selected && !alreadySelected && active.length >= 3) return state;
+      return { ...state, notes: state.notes.map(n => n.id === action.noteId && !n.archivedAt ? { ...n, tasks: n.tasks.map(t => t.id === action.id && (!t.completed || !action.selected) ? { ...t, focusDate: action.selected ? action.day : null } : t) } : n) };
+    }
     case 'delete-task': return { ...state, notes: state.notes.map(n => n.id === action.noteId ? { ...n, tasks: n.tasks.filter(t => t.id !== action.id) } : n) };
     case 'delete-note': {
       if (!state.notes.some(n => n.id === action.id)) return state;
@@ -84,6 +121,10 @@ export function validateData(value: unknown): AppData {
     for (const t of n.tasks) {
       if (!t || typeof t.id !== 'string' || !t.id || taskIds.has(t.id) || typeof t.text !== 'string' || typeof t.bold !== 'boolean' || typeof t.completed !== 'boolean' || typeof t.createdAt !== 'string') throw new Error('A saved task is damaged.');
       taskIds.add(t.id);
+      if (!Object.hasOwn(t, 'focusDate')) t.focusDate = null;
+      if (!Object.hasOwn(t, 'reminderAt')) t.reminderAt = null;
+      if (t.focusDate !== null && (typeof t.focusDate !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(t.focusDate) || t.focusDate.startsWith('0000') || Number.isNaN(Date.parse(t.focusDate)) || new Date(t.focusDate).toISOString().slice(0, 10) !== t.focusDate)) throw new Error('A saved focus date is invalid.');
+      if (t.reminderAt !== null && (!Number.isSafeInteger(t.reminderAt) || t.reminderAt! < 0 || t.reminderAt! > 8_640_000_000_000_000)) throw new Error('A saved reminder is invalid.');
     }
   }
   if (!data.notes.some(n => n.id === data.activeNoteId && !n.archivedAt)) throw new Error('The active note is missing.');

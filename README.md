@@ -77,6 +77,10 @@ To build the Windows executable and NSIS installer, run `npm run desktop:build`.
 | Move the window | Drag blank paper, the header, or the logo |
 | Resize the window | Drag the lower-right grip |
 | Add a task | Expand the toolbar and choose Add a task |
+| Pick today's priorities | Task menu > Add to Today, then use the sun in the footer |
+| Set a reminder | Task menu > Remind me |
+| Snooze a due reminder | Open the footer bell, then Snooze 10 min |
+| Reorder tasks | Drag the grip, use Alt+Up/Down on it, or Move up/down in the task menu |
 | Change paper or text size | Expand the toolbar and open the picker |
 | Keep the note in front | Use the pin control |
 | Archive a note | Open History and choose Archive this note |
@@ -85,6 +89,22 @@ To build the Windows executable and NSIS installer, run `npm run desktop:build`.
 
 To move a note, pull its lower-left corner until the whole sheet lifts. Release, move to the new spot, then click to place. A short pull springs back. **Escape** cancels a carried note and restores its previous position. The placement click does not pass through to another app.
 
+## A little focus, a little nudge
+
+**Today** brings up to three active priorities together across your notes.
+Unfinished priorities carry over; the tasks stay in their original notes.
+Completed priorities remain visible for the day and free a slot for another task.
+
+Use a task's menu to set a date and time, or choose In 10 min or In an hour.
+The footer bell lists scheduled and overdue reminders. Due items offer Snooze
+10 min, Done, and Dismiss. Completing a task cancels its reminder.
+
+The native scheduler runs while Stickly is open or hidden in the tray. Quitting
+the app stops it; overdue reminders are caught on reopening or after sleep.
+Windows notification settings can suppress toasts. Due tasks remain available
+in the app, and snooze controls are in that Reminders view. The browser sample
+shows in-app reminders only.
+
 ## Your notes and your files
 
 The Windows app stores data here:
@@ -92,9 +112,15 @@ The Windows app stores data here:
 ```text
 %APPDATA%\stickly\data.json
 %APPDATA%\stickly\data.backup.json
+%APPDATA%\stickly\reminders.json
 ```
 
-These plain JSON files contain note text, tasks, colors, text sizes, archive history, pin state, and the window position. They are not encrypted. Stickly has no application server, analytics client, or cloud sync. Window size is not saved yet.
+The note files contain text, tasks, colors, text sizes, archive history, pin state, and the window position. These JSON files are not encrypted. Stickly has no application server, analytics client, or cloud sync. Window size is not saved yet.
+
+Task order, Today selections, and reminder times are saved with the notes.
+`reminders.json` keeps task IDs and the last announced schedule to avoid
+repeating the same reminder on every tick or restart. It does not contain task
+text. Reminder notifications can show task text in Windows.
 
 Rust validates saves, writes them atomically, and keeps the previous successful snapshot as `data.backup.json`. If the current file cannot be read, Stickly leaves it untouched rather than overwriting it.
 
