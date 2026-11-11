@@ -25,7 +25,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "desktop:build": "tauri build --bundles nsis"
+    "desktop:build": "tauri build --bundles nsis",
+    "website:build": "node website/build.mjs",
+    "website:check": "node website/check.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

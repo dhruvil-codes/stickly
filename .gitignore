@@ -13,6 +13,7 @@ dist-ssr
 test-results/
 artifacts/
 playwright-report/
+.taste-skill/
 *.local
 
 # Local settings, credentials, and note backups

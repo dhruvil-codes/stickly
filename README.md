@@ -8,6 +8,8 @@ A thousand things on your mind? Give the next one a little paper. Stickly is a W
 
 Windows x64. A normal setup file with Start menu and desktop shortcuts. No Node.js, Rust, or terminal needed. This is an unsigned early preview; see the [release notes](https://github.com/dhruvil-codes/stickly/releases/latest).
 
+**[Visit the Stickly website](https://dhruvil-codes.github.io/stickly/)** · Try a sample note, watch the real demo, and find installation help.
+
 <p align="center">
   <a href="docs/media/stickly-launch.mp4"><img src="docs/media/launch-poster.png" alt="Watch the 30-second Stickly launch film, including the real corner peel" width="100%"></a><br>
   <a href="docs/media/stickly-launch.mp4">Watch the 30-second launch film</a> | <a href="docs/media/native-desktop-demo.mp4">Real Windows demo</a> | <a href="docs/index.html">Video index</a> | <a href="docs/media/README.md">Media kit</a>
