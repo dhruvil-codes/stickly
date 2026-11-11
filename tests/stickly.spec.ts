@@ -25,6 +25,30 @@ test('plain notes are the default, with multiline editing, bold and persistence'
   await expect(body).toHaveValue('An idea worth keeping.\nA second thought.');
 });
 
+test('checklists put tasks directly below the heading and retain keyboard focus after reload', async ({ page }) => {
+  await page.goto('/');
+  await page.getByLabel('Note title').fill('Things to do today');
+  await page.getByRole('button', { name: 'Add a task', exact: true }).click();
+  await expect(page.getByLabel('Note text')).toHaveCount(0);
+  const first = page.getByRole('textbox', { name: 'Task 1', exact: true });
+  await first.fill('Finish the first thing');
+  await page.getByLabel('Note title').press('Enter');
+  await expect(first).toBeFocused();
+  await first.press('Enter');
+  const second = page.getByRole('textbox', { name: 'Task 2', exact: true });
+  await expect(second).toBeFocused();
+  await second.fill('Then the next thing');
+  await expect(page.getByRole('status').filter({ hasText: 'All tucked in' })).toBeVisible();
+  await page.reload();
+  await expect(page.getByLabel('Note text')).toHaveCount(0);
+  await expect(first).toHaveValue('Finish the first thing');
+  await expect(second).toHaveValue('Then the next thing');
+  await page.setViewportSize({ width: 240, height: 200 });
+  await expect(page.getByLabel('Note title')).toBeVisible();
+  await expect(first).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
 test('optional checklist CRUD, Enter, bold and seven paper colors', async ({ page }) => {
   await page.goto('/');
   await page.getByLabel('Note text').fill('Keep the paragraph alongside the checklist.');
@@ -253,13 +277,19 @@ test('edge-to-edge layout and long text never produce horizontal scrollbars', as
   }
 });
 
-test('legacy checklist files gain plain note text without losing tasks', async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('stickly:data:v1', JSON.stringify({ version: 1, activeNoteId: 'legacy', notes: [{ id: 'legacy', title: 'Old note', color: 'sky', tasks: [{ id: 't', text: 'Keep this task', bold: false, completed: true, createdAt: '2026-11-09' }], archivedAt: null, createdAt: '2026-11-09' }], alwaysOnTop: false, windowPosition: null })));
+test('legacy checklist files keep their tasks without introducing an empty note-text row', async ({ page }) => {
+  await page.addInitScript(() => {
+    if (!localStorage.getItem('stickly:data:v1')) localStorage.setItem('stickly:data:v1', JSON.stringify({ version: 1, activeNoteId: 'legacy', notes: [{ id: 'legacy', title: 'Old note', color: 'sky', tasks: [{ id: 't', text: 'Keep this task', bold: false, completed: true, createdAt: '2026-11-09' }], archivedAt: null, createdAt: '2026-11-09' }], alwaysOnTop: false, windowPosition: null }));
+  });
   await page.goto('/');
   await expect(page.getByRole('checkbox')).toBeChecked();
-  await page.getByLabel('Note text').fill('Now with a paragraph.');
-  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('stickly:data:v1')!).notes[0].body)).toBe('Now with a paragraph.');
+  await expect(page.getByLabel('Note text')).toHaveCount(0);
   await expect(page.getByRole('textbox', { name: 'Task 1', exact: true })).toHaveValue('Keep this task');
+  await page.getByRole('textbox', { name: 'Task 1', exact: true }).fill('Keep this edited task');
+  await expect.poll(() => page.evaluate(() => JSON.parse(localStorage.getItem('stickly:data:v1')!).notes[0].body)).toBe('');
+  await page.reload();
+  await expect(page.getByRole('checkbox')).toBeChecked();
+  await expect(page.getByRole('textbox', { name: 'Task 1', exact: true })).toHaveValue('Keep this edited task');
 });
 
 test('corrupted storage is preserved and reported', async ({ page }) => {

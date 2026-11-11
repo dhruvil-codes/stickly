@@ -6,6 +6,26 @@ Stickly already handles the small loop of writing, checking things off, and keep
 
 These are proposals, not release commitments.
 
+## Next productivity release: Today and reminders
+
+Give each day a small focus list with three important tasks, selected from the
+existing notes. An unfinished task stays saved when the day changes. Keep the
+Today view optional so the desktop note remains compact.
+
+Add local reminders with a date, time, Windows notification, and Snooze. Decide
+and document what happens when Stickly is quit or the PC sleeps. Missed reminders
+should still be visible when the app next opens. Daily and weekly repeating
+tasks can follow once one-time reminders behave reliably.
+
+The next checklist improvements should be drag-to-reorder, an important-task
+star, and undo for accidental deletion. Put extra controls in the existing
+collapsed toolbar or on the active row so every task does not gain a row of icons.
+
+Daily focus, reminders, repeating tasks, reordering, and task importance are
+not implemented in the current preview. The daily-list and reminder patterns
+are also documented in [Microsoft To Do's My Day guide](https://support.microsoft.com/en-gb/todo/my-day-and-suggestions)
+and [reminder guide](https://support.microsoft.com/en-us/todo/add-due-dates-and-reminders-in-microsoft-to-do).
+
 ## 1. Make peel placement dependable across displays
 
 Check peel, carry, and placement on mixed-DPI monitors, monitor edges, and after a display is unplugged. The app already tracks a carried note with temporary Windows input hooks and restores its last saved position when it overlaps a connected display. More real-device coverage would catch the cases geometry tests cannot, such as a placement landing on the wrong monitor or a note returning to an awkward spot.
@@ -38,6 +58,6 @@ People who want Stickly ready each morning can choose that behavior, and new use
 
 ## How to choose what comes first
 
-Start with mixed-DPI placement checks and persisted window size. They build on existing native movement and storage code and fix behavior people notice every day. Then add recovery and undo before search, since protecting existing notes matters more than finding them faster. Autostart and signed distribution belong with a release plan and real installer validation.
+Today and reminders are the next user-facing productivity direction. Pair that work with persisted window size and mixed-DPI placement checks, which fix behavior people notice every day. Add recovery and undo before search, since protecting existing notes matters more than finding them faster. Autostart and signed distribution belong with a release plan and real installer validation.
 
 Search, autostart, an updater, and undo are proposals only. Stickly currently has no sync, search, autostart, or general undo feature.

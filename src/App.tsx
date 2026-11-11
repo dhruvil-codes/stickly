@@ -177,7 +177,7 @@ export default function App() {
     setDeleteConfirm(false);
     await saveQueue.current;
     if (last && !lastSaveError.current) await hide();
-    else requestAnimationFrame(() => bodyRef.current?.focus());
+    else requestAnimationFrame(() => (bodyRef.current ?? document.querySelector<HTMLTextAreaElement>('.task-list textarea'))?.focus());
   }
   function keyboard(e: KeyboardEvent) {
     if (e.key === 'Escape') {
@@ -254,11 +254,11 @@ export default function App() {
         </header>
 
         <section className="note-content" aria-label="Current note" inert={historyOpen}>
-          <div className="note-heading"><input ref={titleRef} className="note-title" aria-label="Note title" placeholder="Untitled" value={note.title} maxLength={100} onChange={e => dispatch({ type: 'edit-note', id: note.id, patch: { title: e.target.value } })} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); bodyRef.current?.focus(); } }} /></div>
+          <div className="note-heading"><input ref={titleRef} className="note-title" aria-label="Note title" placeholder="Untitled" value={note.title} maxLength={100} onChange={e => dispatch({ type: 'edit-note', id: note.id, patch: { title: e.target.value } })} onKeyDown={e => { if (e.key === 'Enter' && !e.nativeEvent.isComposing) { e.preventDefault(); (bodyRef.current ?? document.querySelector<HTMLTextAreaElement>('.task-list textarea'))?.focus(); } }} /></div>
           <div className="editor-scroll">
-            <textarea key={note.id} ref={bodyRef} className={`note-body ${note.bodyBold ? 'bold' : ''} ${note.tasks.length ? 'with-checklist' : ''}`} aria-label="Note text" placeholder={note.tasks.length ? 'Add a note…' : 'What’s on your mind?'} value={note.body} maxLength={50000} rows={1} wrap="soft" onChange={e => dispatch({ type: 'edit-note', id: note.id, patch: { body: e.target.value } })} onKeyDown={e => {
+            {(!note.tasks.length || note.body.trim().length > 0) && <textarea key={note.id} ref={bodyRef} className={`note-body ${note.bodyBold ? 'bold' : ''} ${note.tasks.length ? 'with-checklist' : ''}`} aria-label="Note text" placeholder="What’s on your mind?" value={note.body} maxLength={50000} rows={1} wrap="soft" onChange={e => dispatch({ type: 'edit-note', id: note.id, patch: { body: e.target.value } })} onKeyDown={e => {
               if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'b') { e.preventDefault(); dispatch({ type: 'edit-note', id: note.id, patch: { bodyBold: !note.bodyBold } }); }
-            }} />
+            }} />}
             <ul className="task-list" aria-label="Checklist">{note.tasks.map((task, index) => <TaskRow key={task.id} task={task} index={index} fontSize={note.fontSize} focus={focusTask === task.id} onFocused={() => setFocusTask(null)} update={patch => dispatch({ type: 'edit-task', noteId: note.id, id: task.id, patch })} add={() => addTask(task.id)} remove={() => { dispatch({ type: 'delete-task', noteId: note.id, id: task.id }); const next = note.tasks[index + 1] ?? note.tasks[index - 1]; if (next) setFocusTask(next.id); }} />)}</ul>
             {note.tasks.length > 0 && <button className="add-task" onClick={() => addTask()}><Plus size={16} /><span>Add item</span></button>}
           </div>
