@@ -40,12 +40,24 @@ The website uses the original Inter variable WOFF2 for supporting text and
 controls. Shantell remains on the brand and major headings, and inside the actual
 app. Both fonts and their SIL Open Font Licenses are served locally.
 
+The launch video's website poster is a WebP copy of the original
+`docs/media/launch-poster.png`, encoded at quality 85. The original remains in the
+media kit and social previews stay PNG. To regenerate it with FFmpeg:
+
+```sh
+ffmpeg -i docs/media/launch-poster.png -c:v libwebp -quality 85 website/assets/launch-poster.webp
+```
+
 [Search research](SEARCH-RESEARCH.md) records the observed question topics,
 primary references, content map, and limits of the research. It contains no
 invented keyword volumes or ranking forecasts. Each guide has a direct answer,
 working instructions, relevant links, and visible app/version context.
 
 ## Search maintenance
+
+The [November 11 audit](SEO-AUDIT.md) records the verified findings and limits.
+The [action plan](ACTION-PLAN.md) separates published fixes from account and
+product work that remains.
 
 Keep feature claims synchronized with released app behavior. Visible FAQs and
 their JSON-LD are generated from the same answers. There are no fabricated

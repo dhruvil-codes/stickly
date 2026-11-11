@@ -17,7 +17,7 @@ export const download = 'https://github.com/dhruvil-codes/stickly/releases/lates
 const faqs = [
   ['Does Stickly work offline?', 'Yes. Everyday note taking works offline, with no account or application server. Setup may need internet to install Microsoft WebView2 if your PC does not already have it.'],
   ['Is Stickly free to download?', 'Yes. The Windows preview is free to download and use. There is no subscription or sign-in.'],
-  ['Which computers can run it?', 'The current download is for Windows x64. macOS and Linux versions are not distributed or verified. This is an unsigned early preview.'],
+  ['Which computers can run it?', 'The current download is for Windows x64 and has been tested on Windows 10 Pro 22H2. Other Windows versions have not been separately validated. macOS and Linux versions are not distributed or verified. This is an unsigned early preview.'],
   ['Where do my notes go?', 'The desktop app saves notes, tasks and settings in %APPDATA%\\stickly\\data.json on your PC. A previous-save backup sits beside it. These JSON files are not encrypted, and there is no cloud sync.'],
   ['Can I just write, without a to-do list?', 'Absolutely. Start with a plain note, then add checklist items only when you want them. You can have both on the same page.'],
   ['Can I have more than one note?', 'Yes. Use New note and the small page arrows to switch between notes in one desktop window. Separate note windows are not available yet.'],
@@ -35,7 +35,7 @@ const footer = `<footer class="site-footer frame"><div class="footer-top"><p>Mad
 function schema(page) {
   const graph = [
     { '@type': 'WebSite', '@id': site + '#website', name: 'Stickly', url: site, inLanguage: 'en' },
-    { '@type': 'SoftwareApplication', '@id': site + '#app', name: 'Stickly', url: site, description: 'A Windows desktop sticky note app with handwritten plain notes, optional checklists, seven paper colors, a corner-peel interaction, and offline local storage.', operatingSystem: 'Windows x64', applicationCategory: 'ProductivityApplication', softwareVersion: '0.1.0', downloadUrl: download, screenshot: site + 'assets/plain-note.png', image: site + 'assets/social-preview.png', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, author: { '@type': 'Person', name: 'Dhruvil Mistry', url: 'https://github.com/dhruvil-codes' }, featureList: ['Handwritten plain notes and optional checklists', 'Seven paper colors and three text sizes', 'Cursor-controlled corner peel and click-to-place', 'Always-on-top pin and Alt+N shortcut', 'Archive and restore', 'Offline storage on your Windows PC'] },
+    { '@type': 'SoftwareApplication', '@id': site + '#app', name: 'Stickly', url: site, description: 'A Windows desktop sticky note app with handwritten plain notes, optional checklists, seven paper colors, a corner-peel interaction, and offline local storage.', operatingSystem: 'Windows x64', applicationCategory: 'UtilitiesApplication', applicationSubCategory: 'Desktop sticky notes and checklists', softwareVersion: '0.1.0', downloadUrl: download, screenshot: site + 'assets/plain-note.png', image: site + 'assets/social-preview.png', offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' }, author: { '@type': 'Person', name: 'Dhruvil Mistry', url: 'https://github.com/dhruvil-codes' }, featureList: ['Handwritten plain notes and optional checklists', 'Seven paper colors and three text sizes', 'Cursor-controlled corner peel and click-to-place', 'Always-on-top pin and Alt+N shortcut', 'Archive and restore', 'Offline storage on your Windows PC'] },
     { '@type': 'WebPage', '@id': site + page.path, url: site + page.path, name: page.title, description: page.description, isPartOf: { '@id': site + '#website' }, about: { '@id': site + '#app' }, inLanguage: 'en' },
   ];
   if (!page.path || page.path === 'guides/') graph.push({ '@type': 'FAQPage', '@id': site + page.path + '#questions', mainEntity: (!page.path ? faqs : guideQuestions).map(([name, text]) => ({ '@type': 'Question', name, acceptedAnswer: { '@type': 'Answer', text } })) });
@@ -62,6 +62,7 @@ const assetSources = [
   ['src/assets/fonts/ShantellSans-OFL.txt', 'ShantellSans-OFL.txt'],
   ['website/assets/fonts/InterVariable.woff2', 'InterVariable.woff2'],
   ['website/assets/fonts/Inter-OFL.txt', 'Inter-OFL.txt'],
+  ['website/assets/launch-poster.webp', 'launch-poster.webp'],
 ];
 await Promise.all(assetSources.map(([src, dest]) => cp(resolve(root, src), resolve(out, 'assets', dest))));
 await Promise.all(['site.css', 'site.js'].map(n => cp(resolve(here, n), resolve(out, 'assets', n))));

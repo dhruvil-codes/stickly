@@ -61,7 +61,7 @@ document.querySelectorAll('[data-video]').forEach(button => button.addEventListe
   const desktop = button.dataset.video === 'desktop';
   const name = desktop ? 'native-desktop-demo.mp4' : 'stickly-launch.mp4';
   player.querySelector('source').src = `${base}assets/${name}`;
-  player.poster = `${base}assets/${desktop ? 'native-demo-poster.png' : 'launch-poster.png'}`;
+  player.poster = `${base}assets/${desktop ? 'native-demo-poster.png' : 'launch-poster.webp'}`;
   player.setAttribute('aria-label', desktop ? 'Real Stickly Windows app demonstration' : 'Stickly 30-second launch film');
   player.querySelector('track')?.remove();
   if (!desktop) {
