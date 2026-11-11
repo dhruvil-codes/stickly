@@ -2,6 +2,7 @@ import { chromium } from '@playwright/test';
 import assert from 'node:assert/strict';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
+import { pages } from './content.mjs';
 
 const url = process.argv[2] || 'http://127.0.0.1:4317/stickly/';
 const output = resolve('artifacts/website-qa');
@@ -17,6 +18,8 @@ try {
     page.on('response', r => { if (r.status() >= 400 && r.url().startsWith(url)) failed.push(`${r.status()} ${r.url()}`); });
     await page.goto(url);
     await page.evaluate(() => document.fonts.ready);
+    assert.ok(await page.evaluate(() => document.fonts.check('400 17px Inter')), `${width}: Inter loaded`);
+    assert.ok((await page.locator('.hero-copy>p').first().evaluate(p => getComputedStyle(p).fontFamily)).startsWith('Inter'), `${width}: supporting copy uses Inter`);
     assert.equal(await page.title(), 'Stickly — Handwritten sticky notes for Windows');
     assert.ok(await page.locator('.hero .button').isVisible());
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${width}: horizontal overflow`);
@@ -39,6 +42,7 @@ try {
       await page.locator('#try-note').click();
       const frame = page.frameLocator('#sample-desk iframe');
       await frame.locator('.note-title').waitFor();
+      assert.ok((await frame.locator('.note-body').evaluate(p => getComputedStyle(p).fontFamily)).includes('Shantell'), 'The actual note keeps its handwriting');
       await frame.locator('.note-body').fill('A good idea from the website.');
       await frame.getByRole('button', { name: 'Expand controls' }).click();
       await frame.getByRole('button', { name: 'Paper color', exact: true }).click();
@@ -79,16 +83,29 @@ try {
   await page.goto(url);
   await page.locator('#peel').scrollIntoViewIfNeeded();
   assert.equal(await page.locator('#peel-video').evaluate(v => v.paused), true, 'Reduced motion disables automatic loop');
-  for (const route of ['features/', 'download/', 'privacy/']) {
+  for (const route of pages.map(p => p.path).filter(Boolean)) {
     await page.goto(url + route);
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route}: mobile overflow`);
     assert.equal(await page.locator('h1').count(), 1);
-    await page.screenshot({ path: resolve(output, `${route.replace('/', '')}-mobile.png`), fullPage: true });
+    const longHeadings = await page.locator('h1,h2,h3').evaluateAll(headings => headings.filter(h => h.getBoundingClientRect().height / parseFloat(getComputedStyle(h).lineHeight) > 2.1).map(h => h.textContent));
+    assert.deepEqual(longHeadings, [], `${route}: headings fit two lines`);
+    await page.screenshot({ path: resolve(output, `${route.replaceAll('/', '-')}mobile.png`), fullPage: true });
+  }
+  for (const width of [768, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    for (const route of pages.map(p => p.path).filter(Boolean)) {
+      await page.goto(url + route);
+      await page.evaluate(() => document.fonts.ready);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `${route} at ${width}px: overflow`);
+      const long = await page.locator('h1,h2,h3').evaluateAll(headings => headings.filter(h => h.getBoundingClientRect().height / parseFloat(getComputedStyle(h).lineHeight) > 2.1).map(h => h.textContent));
+      assert.deepEqual(long, [], `${route} at ${width}px: headings fit two lines`);
+      if (width === 1440 && route === 'guides/') await page.screenshot({ path: resolve(output, 'guides-desktop.png'), fullPage: true });
+    }
   }
   await context.close();
   assert.deepEqual(errors, [], 'No browser JS errors');
   assert.deepEqual(failed, [], 'No local HTTP errors');
-  result.push('Reduced motion and all three support pages on mobile passed. No JS or HTTP errors.');
+  result.push('Reduced motion and all seven support/guide pages on mobile passed. No JS or HTTP errors.');
   await writeFile(resolve(output, 'results.json'), JSON.stringify(result, null, 2));
   console.log(result.join('\n'));
 } finally { await browser.close(); }

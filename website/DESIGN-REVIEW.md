@@ -93,3 +93,63 @@ The browser run reports no JavaScript or local HTTP errors. Screenshots and
 recordings use synthetic note content. There are no invented product testimonials
 or stock assets to replace. The browser sample's native-control limits remain
 documented in Privacy & storage.
+
+## Inter and spacing refinement — November 11
+
+The user requested Inter supporting text, a cleaner hero, more whitespace, and
+answers to researched sticky-note questions. The original paper-desk direction
+is retained; the large colored hero text panel is removed at the user's request.
+
+| Before | After | Why |
+| --- | --- | --- |
+| System-font copy with handwriting on captions and controls | Self-hosted Inter on copy, navigation, controls, captions, and guides | A consistent readable supporting voice |
+| Two large colored hero panels, with repeated slogans | Neutral copy area, larger gutters, one message, download, and working note | Clearer hierarchy and breathing room |
+| 650–850ms entrances with larger travel | 500–650ms entrances with 12–18px travel and short control feedback | Less visual delay while retaining the paper movement |
+| Basic FAQ and feature reference | A linked guide hub, three practical guides, and researched answers | Help people complete actual tasks and understand limits |
+
+### Refinement round 1
+
+Seen in one second: handwriting, a Windows download, and one note to try.
+
+Idea: the real note supplies the paper character while Inter carries the explanation.
+
+Live thing: the actual app sample, with unchanged handwriting and peel geometry.
+
+Layout by section: open split hero / square peel / menu and photos / wide film /
+receipt / answer stack / ink close / wordmark. Guides use a readable article layout.
+
+Scores: design 8 · usability 8 · creativity 7.5 · content 8.4 → overall 8.0.
+Caps applied: tablet peel heading wraps to three lines, so capped at 6.5 until fixed.
+
+Top three issues: shorten the peel heading at 768px; consolidate small text sizes;
+retain actual Microsoft version distinctions in the guide rather than claiming
+its newer OneNote notes have no pin.
+
+### Refinement round 2 — final
+
+Seen in one second: a note app with a clear download and a quiet readable explanation.
+
+Idea: Shantell is the paper's handwriting; Inter is the site's supporting text.
+
+Live thing: editing, palette dismissal, partial peel, full carry, placement, and reset.
+
+Layout by section: same as refinement round 1. Every final inspector fold and page
+sheet was opened; guide screenshots were reviewed on desktop and phone.
+
+Scores: design 8 · usability 8.3 · creativity 7.5 · content 8.4 → overall 8.0.
+Caps applied: none. Inspector reports zero failures and zero warnings at 1440,
+768, and 390 pixels. Inter accounts for 95% of measured text; Shantell is retained
+for brand and main headings, and in the real app. Inter is explicitly requested,
+so the source linter's generic-font warning is intentionally accepted.
+
+Checks: eight static pages, 175 local links/assets, valid application/article/FAQ
+JSON-LD, canonical URLs, sitemap, font file and OFL license. All support and guide
+pages pass overflow and two-line heading checks at desktop, tablet, and phone
+widths. The real peel, video switching, FAQ, reset, and reduced-motion behavior
+pass. No JavaScript or local HTTP errors were reported. CSS and script URLs now
+include a content version to avoid stale styling after publication.
+
+All product imagery remains owned Stickly footage/screenshots with synthetic
+notes. There are no stock assets or invented testimonials. Search research is
+qualitative; no search-volume figures or rankings are claimed. The actual
+desktop application is not changed by this website refinement.

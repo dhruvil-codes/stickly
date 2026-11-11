@@ -16,10 +16,15 @@ npm run website:check
 The build writes **website/dist**, separately from the desktop app's **dist**.
 Serve it with `/stickly/` mounted at that output directory when testing locally.
 The Pages workflow builds and deploys changes on `main`.
+Stylesheet and script URLs include a content-derived version so returning
+visitors receive the current design after a deployment.
 
 ## Content and assets
 
-- `pages/`: homepage, feature reference, installation help, and privacy/storage.
+- `pages/`: homepage, feature reference, installation help, privacy/storage, a
+  guide index, and practical guides for pinning, offline notes, and checklists.
+- `content.mjs`: shared page metadata and guide questions used by the build and
+  artifact checks.
 - `site.css` and `site.js`: responsive presentation and lightweight interactions.
 - `build.mjs`: static HTML, metadata, JSON-LD, sitemap and optional `llms.txt`.
 - The sample bundles the real React application, including its peel geometry.
@@ -30,6 +35,15 @@ The Pages workflow builds and deploys changes on `main`.
   [the media credits](../docs/media/README.md). The handwriting is the original
   bundled Shantell Sans Bold under its SIL Open Font License. No reference footage
   or personal-use Matcha Salt assets are published.
+
+The website uses the original Inter variable WOFF2 for supporting text and
+controls. Shantell remains on the brand and major headings, and inside the actual
+app. Both fonts and their SIL Open Font Licenses are served locally.
+
+[Search research](SEARCH-RESEARCH.md) records the observed question topics,
+primary references, content map, and limits of the research. It contains no
+invented keyword volumes or ranking forecasts. Each guide has a direct answer,
+working instructions, relevant links, and visible app/version context.
 
 ## Search maintenance
 

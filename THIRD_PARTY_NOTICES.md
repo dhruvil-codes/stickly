@@ -12,6 +12,14 @@ The outlined Stickly wordmark and combined SVG logo are generated from Shantell 
 
 Source and project information: [Shantell Sans project](https://github.com/arrowtype/shantell-sans).
 
+## Inter (website)
+
+The website bundles the original `InterVariable.woff2` from the [Inter project](https://github.com/rsms/inter), without modifications. It is used for supporting text and controls on the website; the desktop app keeps Shantell Sans.
+
+Copyright (c) 2016 The Inter Project Authors (https://github.com/rsms/inter).
+
+Inter is licensed under the SIL Open Font License, Version 1.1. The full license is in [Inter-OFL.txt](website/assets/fonts/Inter-OFL.txt) and is copied into the published website's assets directory.
+
 ## Original Stickly artwork
 
 `public/stickly.svg` is the project's custom sticky note mark. Platform icon files under `src-tauri/icons/` derive from that mark.

@@ -32,6 +32,15 @@ replaces the stripe. The capabilities menu holds real product details; real
 screenshots close its other half. The FAQ uses accessible native details cards.
 Use only owned product imagery and bundled OFL font assets.
 
+November 11 refinement: use Inter for supporting copy, navigation, controls,
+captions, and article text. Retain Shantell for the brand, main headings, and
+actual note content. Remove the hero's yellow text panel and repeated slogans;
+use a neutral ground, generous gutters, and one primary download beside the
+working note. Preserve all existing demos and native app behavior. Add useful
+guides for the distinct search tasks documented in SEARCH-RESEARCH.md, with
+direct answers and current primary references. No keyword-volume or ranking
+claims are part of this work.
+
 ## Copy deck
 
 Hero: Give your brain a little paper.
